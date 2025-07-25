@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard - PahanaEdu</title>
+  <link rel="stylesheet" href="style2.css">
+ 
+</head>
+<body>
+  <div class="navbar">
+  <ul class="nav-links">
+    <li><a href="customer-details.html">Customer Details</a></li>
+    <li><a href="manage-items.html">Manage Items</a></li>
+    <li><a href="billing.html">Billing</a></li>
+    <li><a href="help.html">Help</a></li>
+    <li><a href="pages/login.html">Logout</a></li>
+  </ul>
+</div>
+<img src="https://c0.wallpaperflare.com/preview/484/270/562/read-book-books-book-store.jpg"  class="logo" />
+<div class="customer-form-box">
+  <h3>Add New Item</h3>
+  <form id="itemForm">
+    <label for="itemCode">Item Code:</label>
+    <input type="text" id="itemCode" name="itemCode" required>
+
+    <label for="itemName">Item Name:</label>
+    <input type="text" id="itemName" name="itemName" required>
+
+    <label for="price">Price:</label>
+    <input type="number" id="price" name="price" required>
+
+    <label for="stock">Stock Quantity:</label>
+    <input type="number" id="stock" name="stock" required>
+
+    <button type="submit">Add Item</button>
+    <button type="submit">Update Item</button>
+    <button type="submit">Delete Item</button>
+  </form>
+</div>
+
+</body>
+</html>
