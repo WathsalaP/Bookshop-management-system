@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard - PahanaEdu</title>
+  <link rel="stylesheet" href="style2.css">
+ 
+</head>
+<!-- Add this before </body> -->
+<script>
+document.getElementById('userForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = {
+        userid: document.getElementById('userid').value,
+        username: document.getElementById('username').value,
+        email: document.getElementById('email').value,
+        phone_number: document.getElementById('phone_number').value
+    };
+
+    fetch('http://localhost:8083/api/v1/adduser', { // http://localhost:4567/api/user
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.text();
+    })
+    .then(data => {
+        alert(data); // Show server response
+        document.getElementById('userForm').reset(); // Clear form
+        loaduser (); // Refresh table
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error: ' + error.message);
+    });
+});
+
+// Separate function for user 
+function loaduser () {
+    fetch('http://localhost:8083/api/v1/getusers') // http://localhost:4567/api/user
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('user Table').innerHTML = html;
+        })
+        .catch(error => console.error('Error loading user :', error));
+}
+
+// Load user on page load
+window.addEventListener('DOMContentLoaded', loaduser );
+</script>
+<body>
+  <div class="navbar">
+  <ul class="nav-links">
+    <li><a href="customer-details.html">Customer Details</a></li>
+    <li><a href="user-details.html">User Details</a></li>
+    <li><a href="manage-items.html">Manage Items</a></li>
+    <li><a href="billing.html">Billing</a></li>
+    <li><a href="help.html">Help</a></li>
+    <li><a href="pages/login.html">Logout</a></li>
+  </ul>
+</div>
+<img src="https://c0.wallpaperflare.com/preview/484/270/562/read-book-books-book-store.jpg"  class="logo" />
+<div class="user -form-box">
+  <h3>System User </h3>
+  <form id="user Form">
+    <label for="userid">User ID:</label>
+    <input type="text" id="userid" name="userid" required>
+
+    <label for="username">User name:</label>
+    <input type="text" id="username" name="username" required>
+
+    <label for="email">Email:</label>
+    <textarea id="email" name="email" required></textarea>
+
+    <label for="phone_number">Mobile:</label>
+    <input type="tel" id="phone_number" name="phone_number" required pattern="[0-9]{10}">
+
+    <button type="submit">Add User </button>
+    <button type="submit">Update User </button>
+    
+  </form>
+</div> 
+
+</body>
+</html>
+
+
+
+
+
