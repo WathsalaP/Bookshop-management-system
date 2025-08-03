@@ -1,12 +1,12 @@
 function validate() {
-    var username = document.getElementById("username").value;
-    var password = document.getElementById("password").value;
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
 
     if (username === "Sanduni" && password === "123") {
-        window.location.replace("dashboard.html");
-        return false; // Prevent form submission
+        window.location.replace("index.html"); // Redirect to the new index.html
+        return false; // Prevent form from submitting the default way
     } else {
-        alert("Login failed");
-        return false; // Prevent form submission
+        alert("Login failed. Please check your credentials.");
+        return false; // Prevent reload on failure
     }
 }

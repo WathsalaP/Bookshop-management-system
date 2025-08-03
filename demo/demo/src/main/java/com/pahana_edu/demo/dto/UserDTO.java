@@ -9,14 +9,14 @@ import lombok.NoArgsConstructor;
 @Data
 
 public class UserDTO {
-    private String userID;
+    private String userid;
     private String username;
     private String email;
-    private String phoneNumber;
+    private String phone_number;
 
     // Getters and Setters
-    public String getUserID() {
-        return userID;
+    public String getUserid() {
+        return userid;
     }
 
     public String getUsername() {
@@ -35,12 +35,12 @@ public class UserDTO {
         this.email = email;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getPhone_number() {
+        return phone_number;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setPhone_number(String phone_number) {
+        this.phone_number = phone_number;
     }
 
 }

@@ -34,28 +34,28 @@ public class UserService {
     }
 
     public UserDTO updateUser(UserDTO userDTO) {
-        Optional<UserModel> optionalUser = userRepo.findById(userDTO.getUserID());
+        Optional<UserModel> optionalUser = userRepo.findById(userDTO.getUserid());
 
         if (optionalUser.isPresent()) {
             UserModel existingUser = optionalUser.get();
 
             existingUser.setUsername(userDTO.getUsername());
             existingUser.setEmail(userDTO.getEmail());
-            existingUser.setPhoneNumber(userDTO.getPhoneNumber());
+            existingUser.setPhone_number(userDTO.getPhone_number());
 
             userRepo.save(existingUser);
             return userDTO;
         } else {
-            throw new RuntimeException("User not found with ID: " + userDTO.getUserID());
+            throw new RuntimeException("User not found with ID: " + userDTO.getUserid());
         }
     }
 
-    public void deleteUser(String userID) {
-        Optional<UserModel> optionalUser = userRepo.findById(userID);
+    public void deleteUser(String userid) {
+        Optional<UserModel> optionalUser = userRepo.findById(userid);
         if (optionalUser.isPresent()) {
             userRepo.delete(optionalUser.get());
         } else {
-            throw new RuntimeException("User not found with ID: " + userID);
+            throw new RuntimeException("User not found with ID: " + userid);
         }
     }
 

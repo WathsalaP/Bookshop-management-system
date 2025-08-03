@@ -47,6 +47,12 @@ body {
   padding-top: 60px; /* To prevent content from hiding under navbar */
 }
 
+.container {
+  display: flex;
+  flex-direction: row;
+  margin-top: 0px;
+  gap: 20px;
+}
 .customer-form-box {
   width: 300px;
   margin: 20px auto;

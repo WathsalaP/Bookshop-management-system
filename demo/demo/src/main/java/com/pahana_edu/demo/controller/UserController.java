@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+//import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -17,7 +18,8 @@ import com.pahana_edu.demo.dto.UserDTO;
 import com.pahana_edu.demo.service.UserService;
 
 @RestController
-@CrossOrigin
+// @CrossOrigin
+@CrossOrigin("*")
 @RequestMapping(value = "api/v1")
 
 public class UserController {
@@ -37,7 +39,7 @@ public class UserController {
 
     @PatchMapping("/updateuser/{id}")
     public String updateUser(@PathVariable String id, @RequestBody UserDTO userDTO) {
-        userDTO.setUserID(id); // set userID from path variable
+        userDTO.setUserid(id); // set userID from path variable
         userService.updateUser(userDTO);
         return "User updated successfully!";
     }

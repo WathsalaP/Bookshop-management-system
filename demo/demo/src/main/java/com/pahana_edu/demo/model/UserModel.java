@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 
 public class UserModel {
     @Id
-    private String userID;
+    private String userid;
     private String username;
     private String email;
-    private String phoneNumber;
+    private String phone_number;
 }
