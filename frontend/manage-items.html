@@ -1,11 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Dashboard - PahanaEdu</title>
+  <title>Dashboard - Pahana Edu</title>
   <link rel="stylesheet" href="style2.css">
- 
+ <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+
+<!-- jQuery library 
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>         -->
+
+<!-- 🔵 MODIFIED: Use full jQuery (not slim) -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> 
+
+<!-- Popper JS -->
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
+
 <body>
+
   <div class="navbar">
   <ul class="nav-links">
     <li><a href="customer-details.html">Customer Details</a></li>
@@ -17,7 +32,13 @@
   </ul>
 </div>
 <img src="https://c0.wallpaperflare.com/preview/484/270/562/read-book-books-book-store.jpg"  class="logo" />
-<div class="customer-form-box">
+<!--
+<div class="itemContainer">
+<div class="item-form-box">
+-->
+<div class="itemContainer">
+<div class="form-box">
+
   <h3>Add New Item</h3>
   <form id="itemForm">
     <label for="itemCode">Item Code:</label>
@@ -32,11 +53,137 @@
     <label for="stock">Stock Quantity:</label>
     <input type="number" id="stock" name="stock" required>
 
-    <button type="submit">Add Item</button>
-    <button type="submit">Update Item</button>
-    <button type="submit">Delete Item</button>
+    <button type="submit" id="addItemBtn">Add Item</button>
+    <button type="submit" id="updateItemBtn">Update Item</button>
+    <button type="submit" id="deleteItemBtn">Delete Item</button>
   </form>
+  
+</div> 
+<div class="table-responsive mt-4">
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>Item Code</th>
+        <th>Item Name</th>
+        <th>Price</th>
+        <th>Stock Quantity</th>
+      </tr>
+    </thead>
+    <tbody id="item_model">
+      <!-- item rows will be inserted here by JavaScript -->
+    </tbody>
+  </table>
+</div>
 </div>
 
+<script>
+  //Add item
+document.getElementById('addItemBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    
+    const formData = {
+        itemCode: document.getElementById('itemCode').value,
+        itemName: document.getElementById('itemName').value,
+        price: document.getElementById('price').value,
+        stock: document.getElementById('stock').value
+    };
+
+    fetch('http://localhost:8083/api/v1/additem', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.text();
+    })
+    .then(data => {
+        alert(data);
+        document.getElementById('itemForm').reset();
+        loadItem();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error: ' + error.message);
+    });
+});
+       
+// Update Item
+document.getElementById('updateItemBtn').addEventListener('click', function (e) {
+    e.preventDefault();
+
+    const itemCode = document.getElementById('itemCode').value;
+    const updatedData = {
+        itemCode: itemCode,
+        itemName: document.getElementById('itemName').value,
+        price: document.getElementById('price').value,
+        stock: document.getElementById('stock').value
+    };
+
+    fetch(`http://localhost:8083/api/v1/updateitem/${itemCode}`, {
+        method: 'PATCH', // Or PUT depending on your backend
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedData)
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Failed to update item');
+        return response.text();
+    })
+    .then(data => {
+        console.log(data);
+        document.getElementById('itemForm').reset();
+        loadItem(); // Refresh table
+    })
+    .catch(error => {
+        console.error('Update Error:', error);
+        alert('Update Error: ' + error.message);
+    });
+});
+// Separate function for item 
+function loadItem() {
+    fetch('http://localhost:8083/api/v1/getitems')
+        .then(response => response.json())
+        .then(items => {
+            const tableBody = document.getElementById('item_model');
+            tableBody.innerHTML = ''; // Clear previous rows
+
+            items.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.itemCode}</td>
+                    <td>${item.itemName}</td>
+                    <td>${item.price}</td>
+                    <td>${item.stock}</td>
+                `;
+                tableBody.appendChild(row);
+
+                // Add click listener to fill form on row click
+                row.addEventListener('click', function () {
+                    document.getElementById('itemCode').value = item.itemCode;
+                    document.getElementById('itemName').value = item.itemName;
+                    document.getElementById('price').value = item.price;
+                    document.getElementById('stock').value = item.stock;
+                });
+
+            });
+        })
+        .catch(error => console.error('Error loading item:', error));
+}
+
+
+// Load item on page load
+window.addEventListener('DOMContentLoaded', loadItem );
+
+</script>
 </body>
 </html>
+
+
+
+

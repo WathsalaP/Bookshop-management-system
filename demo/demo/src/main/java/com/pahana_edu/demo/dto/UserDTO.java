@@ -18,6 +18,9 @@ public class UserDTO {
     public String getUserid() {
         return userid;
     }
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
 
     public String getUsername() {
         return username;
