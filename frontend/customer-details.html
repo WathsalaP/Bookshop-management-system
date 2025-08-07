@@ -2,12 +2,12 @@
 <html>
 <head>
   <title>Dashboard - Pahana Edu</title>
-  <link rel="stylesheet" href="style2.css">
- <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 
-<!-- jQuery library 
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script> -->
+
+<link rel="stylesheet" href="style2.css">
+
+<!-- jQuery library -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script> 
 
 <!-- 🔵 MODIFIED: Use full jQuery (not slim) -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -20,54 +20,60 @@
 </head>
 
 <body>
-  <div class="navbar">
-  <ul class="nav-links">
-    <li><a href="customer-details.html">Customer Details</a></li>
-    <li><a href="SystemUser.html">User Details</a></li>
-    <li><a href="manage-items.html">Manage Items</a></li>
-    <li><a href="billing.html">Billing</a></li>
-    <li><a href="help.html">Help</a></li>
-    <li><a href="pages/login.html">Logout</a></li>
-  </ul>
-</div>
-<img src="https://c0.wallpaperflare.com/preview/484/270/562/read-book-books-book-store.jpg"  class="logo" />
-<div class="customerContainer">
-<div class="form-box">
-  <h3>Customers </h3>
-  <form id="customerForm">
-    <label for="customerId">Customer ID:</label>
-    <input type="text" id="customerId" name="customerId" required>
+  <header>
+      <nav class="navbar section-content">
+        <h2 class="logo-text">📚 Pahana Edu</h2>
+        <ul class="nav-menu">
+          <button id="menu-close-button" class="fas fa-times"></button>
+          <li class="nav-item"><a href="customer-details.html" class="nav-link">Customer Details</a></li>
+          <li class="nav-item"><a href="SystemUser.html" class="nav-link">User Details</a></li>
+          <li class="nav-item"><a href="manage-items.html" class="nav-link">Manage Items</a></li>
+          <li class="nav-item"><a href="billing.html" class="nav-link">Billing</a></li>
+          <li class="nav-item"><a href="help.html" class="nav-link">Help</a></li>
+          <li class="nav-item"><a href="pages/login.html" class="nav-link">Logout</a></li>
+        </ul>
+        <button id="menu-open-button" class="fas fa-bars"></button>
+      </nav>
+    </header>
+    
+<img class="logo" src="https://c0.wallpaperflare.com/preview/484/270/562/read-book-books-book-store.jpg" />
+<div class="container">
+  <div class="form-box">
+    <h3>Customers </h3>
+    <form id="customerForm">
+      <label for="customerId">Customer ID:</label>
+      <input type="text" id="customerId" name="customerId" required>
 
-    <label for="customerName">Customer Name:</label>
-    <input type="text" id="customerName" name="customerName" required>
+      <label for="customerName">Customer Name:</label>
+      <input type="text" id="customerName" name="customerName" required>
 
-    <label for="customerAddress">Customer Address:</label>
-    <textarea id="customerAddress" name="customerAddress" required></textarea>
+      <label for="customerAddress">Customer Address:</label>
+      <textarea id="customerAddress" name="customerAddress" required></textarea>
 
-    <label for="phoneNumber">Mobile:</label>
-    <input type="tel" id="phoneNumber" name="phoneNumber" required pattern="[0-9]{10}">
+      <label for="phoneNumber">Mobile:</label>
+      <input type="tel" id="phoneNumber" name="phoneNumber" required pattern="[0-9]{10}">
 
-    <button type="submit" id="addCustomerBtn">Add Customer</button>
-    <button type="submit" id="updateCustomerBtn">Update Customer</button>
+      <button type="submit" id="addCustomerBtn">Add Customer</button>
+      <button type="submit" id="updateCustomerBtn">Update Customer</button>
 
-  </form>
-  
-</div> 
-<div class="table-responsive mt-4">
-  <table class="table table-bordered table-striped">
-    <thead>
-      <tr>
-        <th>Customer ID</th>
-        <th>Customer Name</th>
-        <th>Customer Address</th>
-        <th>Phone Number</th>
-      </tr>
-    </thead>
-    <tbody id="customer_model">
-      <!-- customer rows will be inserted here by JavaScript -->
-    </tbody>
-  </table>
-</div>
+    </form>
+    
+  </div> 
+  <div class="table-responsive mt-4">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Customer ID</th>
+          <th>Customer Name</th>
+          <th>Customer Address</th>
+          <th>Phone Number</th>
+        </tr>
+      </thead>
+      <tbody id="customer_model">
+        <!-- customer rows will be inserted here by JavaScript -->
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <script>

@@ -2,12 +2,13 @@
 <html>
 <head>
   <title>Dashboard - Pahana Edu</title>
-  <link rel="stylesheet" href="style2.css">
- <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  
 
-<!-- jQuery library 
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>         -->
+
+<link rel="stylesheet" href="style2.css">
+
+<!-- jQuery library  -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>        
 
 <!-- 🔵 MODIFIED: Use full jQuery (not slim) -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> 
@@ -19,168 +20,174 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
-<body>
+  <body>
+    <header>
+      <nav class="navbar section-content">
+        <h2 class="logo-text">📚 Pahana Edu</h2>
+        <ul class="nav-menu">
+          <button id="menu-close-button" class="fas fa-times"></button>
+          <li class="nav-item"><a href="customer-details.html" class="nav-link">Customer Details</a></li>
+          <li class="nav-item"><a href="SystemUser.html" class="nav-link">User Details</a></li>
+          <li class="nav-item"><a href="manage-items.html" class="nav-link">Manage Items</a></li>
+          <li class="nav-item"><a href="billing.html" class="nav-link">Billing</a></li>
+          <li class="nav-item"><a href="help.html" class="nav-link">Help</a></li>
+          <li class="nav-item"><a href="pages/login.html" class="nav-link">Logout</a></li>
+        </ul>
+        <button id="menu-open-button" class="fas fa-bars"></button>
+      </nav>
+    </header>
 
-  <div class="navbar">
-  <ul class="nav-links">
-    <li><a href="customer-details.html">Customer Details</a></li>
-    <li><a href="SystemUser.html">User Details</a></li>
-    <li><a href="manage-items.html">Manage Items</a></li>
-    <li><a href="billing.html">Billing</a></li>
-    <li><a href="help.html">Help</a></li>
-    <li><a href="pages/login.html">Logout</a></li>
-  </ul>
-</div>
-<img src="https://c0.wallpaperflare.com/preview/484/270/562/read-book-books-book-store.jpg"  class="logo" />
-<!--
-<div class="userContainer">
-<div class="user-form-box">
--->
-<div class="customerContainer">
-<div class="form-box">
+    <img class="logo" src="https://c0.wallpaperflare.com/preview/484/270/562/read-book-books-book-store.jpg" />
+  <!--
+  <div class="userContainer">
+  <div class="user-form-box">
+  -->
+    <div class="container">
+      <div class="form-box">
 
-  <h3>System User </h3>
-  <form id="userForm">
-    <label for="userid">User ID:</label>
-    <input type="text" id="userid" name="userid" required>
+        <h3>System User </h3>
+        <form id="userForm">
+          <label for="userid">User ID:</label>
+          <input type="text" id="userid" name="userid" required>
 
-    <label for="username">User name:</label>
-    <input type="text" id="username" name="username" required>
+          <label for="username">User name:</label>
+          <input type="text" id="username" name="username" required>
 
-    <label for="email">Email:</label>
-    <textarea id="email" name="email" required></textarea>
+          <label for="email">Email:</label>
+          <textarea id="email" name="email" required></textarea>
 
-    <label for="phone_number">Mobile:</label>
-    <input type="tel" id="phone_number" name="phone_number" required pattern="[0-9]{10}">
+          <label for="phone_number">Mobile:</label>
+          <input type="tel" id="phone_number" name="phone_number" required pattern="[0-9]{10}">
 
-    <button type="submit" id="addUserBtn">Add User</button>
-    <button type="submit" id="updateUserBtn">Update User</button>
-    
-  </form>
-  
-</div> 
-<div class="table-responsive mt-4">
-  <table class="table table-bordered table-striped">
-    <thead>
-      <tr>
-        <th>User ID</th>
-        <th>User Name</th>
-        <th>Email</th>
-        <th>Phone Number</th>
-      </tr>
-    </thead>
-    <tbody id="user_model">
-      <!-- User rows will be inserted here by JavaScript -->
-    </tbody>
-  </table>
-</div>
-</div>
+          <button type="submit" id="addUserBtn">Add User</button>
+          <button type="submit" id="updateUserBtn">Update User</button>
+          
+        </form>
+        
+      </div> 
+      <div class="table-responsive mt-4">
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>User ID</th>
+              <th>User Name</th>
+              <th>Email</th>
+              <th>Phone Number</th>
+            </tr>
+          </thead>
+          <tbody id="user_model">
+            <!-- User rows will be inserted here by JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-<script>
-  //Add user
-document.getElementById('addUserBtn').addEventListener('click', function(e) {
-    e.preventDefault();
-    
-    const formData = {
-        userid: document.getElementById('userid').value,
-        username: document.getElementById('username').value,
-        email: document.getElementById('email').value,
-        phone_number: document.getElementById('phone_number').value
-    };
+    <script>
+      //Add user
+    document.getElementById('addUserBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const formData = {
+            userid: document.getElementById('userid').value,
+            username: document.getElementById('username').value,
+            email: document.getElementById('email').value,
+            phone_number: document.getElementById('phone_number').value
+        };
 
-    fetch('http://localhost:8083/api/v1/adduser', { // http://localhost:4567/api/user
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.text();
-    })
-    .then(data => {
-        alert(data); // Show server response
-        document.getElementById('userForm').reset(); // Clear form
-        loaduser (); // Refresh table
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error: ' + error.message);
-    });
-});
-// Update User
-document.getElementById('updateUserBtn').addEventListener('click', function (e) {
-    e.preventDefault();
-
-    const userid = document.getElementById('userid').value;
-    const updatedData = {
-        userid: userid,
-        username: document.getElementById('username').value,
-        email: document.getElementById('email').value,
-        phone_number: document.getElementById('phone_number').value
-    };
-
-    fetch(`http://localhost:8083/api/v1/updateuser/${userid}`, {
-        method: 'PATCH', // Or PUT depending on your backend
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedData)
-    })
-    .then(response => {
-        if (!response.ok) throw new Error('Failed to update user');
-        return response.text();
-    })
-    .then(data => {
-        console.log(data);
-        document.getElementById('userForm').reset();
-        loaduser(); // Refresh table
-    })
-    .catch(error => {
-        console.error('Update Error:', error);
-        alert('Update Error: ' + error.message);
-    });
-});
-// Separate function for user 
-function loaduser() {
-    fetch('http://localhost:8083/api/v1/getusers')
-        .then(response => response.json())
-        .then(users => {
-            const tableBody = document.getElementById('user_model');
-            tableBody.innerHTML = ''; // Clear previous rows
-
-            users.forEach(user => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${user.userid}</td>
-                    <td>${user.username}</td>
-                    <td>${user.email}</td>
-                    <td>${user.phone_number}</td>
-                `;
-                tableBody.appendChild(row);
-
-                // Add click listener to fill form on row click
-                row.addEventListener('click', function () {
-                    document.getElementById('userid').value = user.userid;
-                    document.getElementById('username').value = user.username;
-                    document.getElementById('email').value = user.email;
-                    document.getElementById('phone_number').value = user.phone_number;
-                });
-
-            });
+        fetch('http://localhost:8083/api/v1/adduser', { // http://localhost:4567/api/user
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
         })
-        .catch(error => console.error('Error loading user:', error));
-}
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text();
+        })
+        .then(data => {
+            alert(data); // Show server response
+            document.getElementById('userForm').reset(); // Clear form
+            loaduser (); // Refresh table
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error: ' + error.message);
+        });
+    });
+    // Update User
+    document.getElementById('updateUserBtn').addEventListener('click', function (e) {
+        e.preventDefault();
+
+        const userid = document.getElementById('userid').value;
+        const updatedData = {
+            userid: userid,
+            username: document.getElementById('username').value,
+            email: document.getElementById('email').value,
+            phone_number: document.getElementById('phone_number').value
+        };
+
+        fetch(`http://localhost:8083/api/v1/updateuser/${userid}`, {
+            method: 'PATCH', // Or PUT depending on your backend
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedData)
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Failed to update user');
+            return response.text();
+        })
+        .then(data => {
+            console.log(data);
+            document.getElementById('userForm').reset();
+            loaduser(); // Refresh table
+        })
+        .catch(error => {
+            console.error('Update Error:', error);
+            alert('Update Error: ' + error.message);
+        });
+    });
+    // Separate function for user 
+    function loaduser() {
+        fetch('http://localhost:8083/api/v1/getusers')
+            .then(response => response.json())
+            .then(users => {
+                const tableBody = document.getElementById('user_model');
+                tableBody.innerHTML = ''; // Clear previous rows
+
+                users.forEach(user => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${user.userid}</td>
+                        <td>${user.username}</td>
+                        <td>${user.email}</td>
+                        <td>${user.phone_number}</td>
+                    `;
+                    tableBody.appendChild(row);
+
+                    // Add click listener to fill form on row click
+                    row.addEventListener('click', function () {
+                        document.getElementById('userid').value = user.userid;
+                        document.getElementById('username').value = user.username;
+                        document.getElementById('email').value = user.email;
+                        document.getElementById('phone_number').value = user.phone_number;
+                    });
+
+                });
+            })
+            .catch(error => console.error('Error loading user:', error));
+    }
 
 
-// Load user on page load
-window.addEventListener('DOMContentLoaded', loaduser );
+    // Load user on page load
+    window.addEventListener('DOMContentLoaded', loaduser );
 
-</script>
-</body>
+    </script>
+    <script src="script.js"></script>
+  </body>
 </html>
 
 
