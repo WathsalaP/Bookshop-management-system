@@ -1,5 +1,7 @@
 package com.pahana_edu.demo.dto;
 
+import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,14 +13,14 @@ import lombok.NoArgsConstructor;
 public class ItemDTO {
     private String itemCode;
     private String itemName;
-    private String price;
+    private BigDecimal price;
     private String stock;
 
     // Getters and Setters
     public String getItemCode() {
         return itemCode;
     }
-    
+
     public void setItemCode(String itemCode) {
         this.itemCode = itemCode;
     }
@@ -31,11 +33,11 @@ public class ItemDTO {
         this.itemName = itemName;
     }
 
-    public String getPrice() {
+    public BigDecimal getPrice() { // CHANGED
         return price;
     }
 
-    public void setprice(String price) {
+    public void setPrice(BigDecimal price) { // CHANGED
         this.price = price;
     }
 

@@ -48,8 +48,8 @@
 
     <h3>Add New Item</h3>
     <form id="itemForm">
-      <label for="itemCode">Item Code:</label>
-      <input type="text" id="itemCode" name="itemCode" required>
+    <!-- <label for="itemCode">Item Code:</label> -->
+      <input type="hidden" id="itemCode" name="itemCode" > 
 
       <label for="itemName">Item Name:</label>
       <input type="text" id="itemName" name="itemName" required>
@@ -90,9 +90,15 @@ document.getElementById('addItemBtn').addEventListener('click', function(e) {
     e.preventDefault();
     
     const formData = {
+      /*
         itemCode: document.getElementById('itemCode').value,
         itemName: document.getElementById('itemName').value,
         price: document.getElementById('price').value,
+        stock: document.getElementById('stock').value
+        */
+
+        itemName: document.getElementById('itemName').value,
+        price: parseFloat(document.getElementById('price').value),  // send price as a number
         stock: document.getElementById('stock').value
     };
 
@@ -128,7 +134,8 @@ document.getElementById('updateItemBtn').addEventListener('click', function (e) 
     const updatedData = {
         itemCode: itemCode,
         itemName: document.getElementById('itemName').value,
-        price: document.getElementById('price').value,
+        price: parseFloat(document.getElementById('price').value), 
+        //price: document.getElementById('price').value,
         stock: document.getElementById('stock').value
     };
 

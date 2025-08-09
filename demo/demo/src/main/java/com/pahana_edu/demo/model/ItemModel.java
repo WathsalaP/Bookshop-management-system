@@ -1,5 +1,7 @@
 package com.pahana_edu.demo.model;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
@@ -15,6 +17,10 @@ public class ItemModel {
     @Id
     private String itemCode;
     private String itemName;
-    private String price;
+    private BigDecimal price;
     private String stock;
+
+    public void setPrice(BigDecimal price2) {
+        this.price = price2;
+    }
 }
