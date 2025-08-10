@@ -20,7 +20,7 @@ public class ItemModel {
     private BigDecimal price;
     private String stock;
 
-    public void setPrice(BigDecimal price2) {
-        this.price = price2;
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 }

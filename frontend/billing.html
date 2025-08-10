@@ -1,21 +1,564 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Dashboard - PahanaEdu</title>
+  <title>Dashboard - Pahana Edu</title>
   <link rel="stylesheet" href="style2.css">
- 
+  <!-- jQuery and Bootstrap -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
-<body>
-  <div class="navbar">
-  <ul class="nav-links">
-    <li><a href="customer-details.html">Customer Details</a></li>
-    <li><a href="SystemUser.html">User Details</a></li>
-    <li><a href="manage-items.html">Manage Items</a></li>
-    <li><a href="billing.html">Billing</a></li>
-    <li><a href="help.html">Help</a></li>
-    <li><a href="pages/login.html">Logout</a></li>
-  </ul>
+
+<body class="p-4">
+  <header>
+    <nav class="navbar section-content">
+      <h2 class="logo-text">📚 Pahana Edu</h2>
+      <ul class="nav-menu">
+        <button id="menu-close-button" class="fas fa-times"></button>
+        <li class="nav-item"><a href="customer-details.html" class="nav-link">Customer Details</a></li>
+        <li class="nav-item"><a href="SystemUser.html" class="nav-link">User Details</a></li>
+        <li class="nav-item"><a href="manage-items.html" class="nav-link">Manage Items</a></li>
+        <li class="nav-item"><a href="billing.html" class="nav-link">Billing</a></li>
+        <li class="nav-item"><a href="help.html" class="nav-link">Help</a></li>
+        <li class="nav-item"><a href="pages/login.html" class="nav-link">Logout</a></li>
+      </ul>
+      <button id="menu-open-button" class="fas fa-bars"></button>
+    </nav>
+  </header>
+
+  <img class="logo" src="https://c0.wallpaperflare.com/preview/484/270/562/read-book-books-book-store.jpg" />
+
+  <div class="container">
+    <div class="form-box">
+      <h2 class="mb-4">Billing</h2>
+      <div class="card-body">
+        <form id="billingForm" autocomplete="off" onsubmit="return false;">
+          <div class="form-row">
+            <div class="form-group col-md-4 position-relative">
+              <label for="customerSearch">Customer</label>
+              <input id="customerSearch" class="form-control" placeholder="Search customer by name..." />
+              <div id="custSuggestions" class="suggestions"></div>
+            </div>
+
+            <div class="form-group col-md-2">
+              <label for="discountInput">Discount (%)</label>
+              <input id="discountInput" type="number" class="form-control" min="0" value="0" />
+            </div>
+
+            <div class="form-group col-md-3">
+              <label for="invoiceDate">Date</label>
+              <input id="invoiceDate" type="datetime-local" class="form-control" />
+            </div>
+
+            <div class="form-group col-md-3 text-right align-self-end">
+              <button id="clearBtn" class="btn btn-outline-secondary">Clear</button>
+            </div>
+          </div>
+
+          <!-- Item add section -->
+          <div class="form-row align-items-end">
+            <div class="form-group col-md-4 position-relative">
+              <label for="itemSearch">Add Item</label>
+              <input id="itemSearch" class="form-control" placeholder="Type item code or name..." />
+              <div id="itemsDropdown" class="items-dropdown"></div>
+            </div>
+            <div class="form-group col-md-2">
+              
+              <input id="manualPrice" type="hidden" step="0.01" min="0" class="form-control" placeholder="Price" />
+            </div>
+            <div class="form-group col-md-2">
+              
+              <input id="manualQty" type="hidden" min="1" value="1" class="form-control" />
+            </div>
+            <div class="form-group col-md-2">
+              <button id="addManualBtn" class="btn btn-primary btn-block">Add</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Cart table (simplified) -->
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5>Your Cart</h5>
+        <div class="table-responsive">
+          <table class="receipt-table">
+            <thead class="thead-dark">
+              <tr>
+                <th>Item</th>
+                <th class="text-right">Price</th>
+                <th class="text-center">Qty</th>
+              </tr>
+            </thead>
+            <tbody id="cartBody">
+              <!-- Items will be added here dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="text-right">
+          <button id="saveBtn" class="btn btn-success">Save</button>
+          <button id="saveCalcBtn" class="btn btn-primary">Save & Calculate (Invoice)</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Invoice Modal -->
+<div class="modal fade" id="invoiceModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Invoice</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+  <div class="modal-body" id="invoiceBody">
+    <div class="invoice-header">
+        <h2>PAHANA EDU</h2>
+        <p>123 Book Street, Colombo, Sri Lanka</p>
+    </div>
+    
+    <div class="invoice-meta">
+        <div>
+            <strong>Invoice #:</strong> <span id="invoiceNumber"></span><br>
+            <strong>Date:</strong> <span id="invoiceDateDisplay"></span>
+        </div>
+        <div>
+            <strong>Customer:</strong> <span id="invoiceCustomer"></span><br>
+        </div>
+    </div>
+    
+    <table class="receipt-table">
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th class="text-right">Unit Price</th>
+                <th class="text-center">Qty</th>
+                <th class="text-right">Amount</th>
+            </tr>
+        </thead>
+        <tbody id="invoiceItems">
+            <!-- Items will be added here dynamically -->
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" class="text-right"><strong>Subtotal:</strong></td>
+                <td class="text-right" id="invoiceSubtotal"></td>
+            </tr>
+            <tr>
+                <td colspan="3" class="text-right"><strong>Discount:</strong></td>
+                <td class="text-right" id="invoiceDiscount"></td>
+            </tr>
+            <tr class="receipt-total">
+                <td colspan="3" class="text-right"><strong>TOTAL:</strong></td>
+                <td class="text-right" id="invoiceTotal"></td>
+            </tr>
+        </tfoot>
+    </table>
+    
+    <div class="text-center mt-4">
+        <p>Thank you for your purchase!</p>
+        <p>Terms: Payment due within 7 days</p>
+    </div>
 </div>
-<img src="https://c0.wallpaperflare.com/preview/484/270/562/read-book-books-book-store.jpg"  class="logo" />
+
+      
+      <div class="modal-footer">
+        <button id="printInvoiceBtn" type="button" class="btn btn-secondary">
+          <i class="fas fa-print"></i> Print
+        </button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <script src="billing.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+/* ---------- Global State ---------- */
+let customers = []; // Loaded from backend
+let items = [];     // Loaded from backend
+let cart = [];      // { itemCode, itemName, itemPrice, quantity }
+let selectedCustomer = null;
+
+/* ---------- Helper Functions ---------- */
+function fetchJson(url) {
+  return fetch(url).then(r => r.json());
+}
+
+function money(x) { 
+  return Number(x).toFixed(2); 
+}
+
+function escapeHtml(str) { 
+  if(str == null) return ''; 
+  return String(str).replace(/[&<>"']/g, m => 
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); 
+}
+
+/* ---------- Initial Load ---------- */
+document.addEventListener('DOMContentLoaded', () => {
+  // Set default date/time
+  const dt = new Date();
+  const isoLocal = new Date(dt.getTime() - dt.getTimezoneOffset()*60000).toISOString().slice(0,16);
+  document.getElementById('invoiceDate').value = isoLocal;
+
+  loadCustomers();
+  loadItems();
+});
+
+/* ---------- Data Loading ---------- */
+function loadCustomers() {
+  fetchJson('http://localhost:8083/api/v1/getcustomers')
+    .then(data => { customers = data || []; })
+    .catch(e => { console.error('loadCustomers', e); customers = []; });
+}
+
+function loadItems() {
+  fetchJson('http://localhost:8083/api/v1/getitems')
+    .then(data => { items = data || []; })
+    .catch(e => { console.error('loadItems', e); items = []; });
+}
+
+/* ---------- Customer Search ---------- */
+const custInput = document.getElementById('customerSearch');
+const custBox = document.getElementById('custSuggestions');
+let custActive = -1;
+
+custInput.addEventListener('input', onCustInput);
+custInput.addEventListener('keydown', onCustKeyDown);
+custInput.addEventListener('focus', () => showCustSuggestions(customers.slice(0,50)));
+document.addEventListener('click', (e) => {
+  if (!custInput.contains(e.target) && !custBox.contains(e.target)) hideCustSuggestions();
+});
+
+function onCustInput(e) {
+  const q = e.target.value.trim().toLowerCase();
+  if(!q) return showCustSuggestions(customers.slice(0,50));
+  const filtered = customers.filter(c => (c.customerName||'').toLowerCase().includes(q));
+  showCustSuggestions(filtered.slice(0,50));
+}
+
+function showCustSuggestions(list) {
+  custBox.innerHTML = '';
+  custActive = -1;
+  if(!list || list.length===0) { custBox.style.display='none'; return; }
+  
+  list.forEach((c, idx) => {
+    const div = document.createElement('div');
+    div.className = 'suggest-item';
+    div.innerHTML = `<strong>${escapeHtml(c.customerName)}</strong>`;
+    div.addEventListener('click', () => { selectCustomer(c); hideCustSuggestions(); });
+    div.addEventListener('mouseenter', () => setCustActive(idx));
+    custBox.appendChild(div);
+  });
+  custBox.style.display = 'block';
+}
+
+function hideCustSuggestions() { 
+  custBox.style.display='none'; 
+  custActive=-1; 
+}
+
+function setCustActive(i) {
+  const items = custBox.querySelectorAll('.suggest-item');
+  items.forEach(x => x.classList.remove('active'));
+  if(i >= 0 && i < items.length) { 
+    items[i].classList.add('active'); 
+    custActive = i; 
+  }
+}
+
+function onCustKeyDown(e) {
+  const itemsEls = custBox.querySelectorAll('.suggest-item');
+  if(!itemsEls || itemsEls.length===0) return;
+  
+  if(e.key==='ArrowDown') { 
+    e.preventDefault(); 
+    setCustActive((custActive+1)%itemsEls.length); 
+  }
+  else if(e.key==='ArrowUp') { 
+    e.preventDefault(); 
+    setCustActive((custActive-1+itemsEls.length)%itemsEls.length); 
+  }
+  else if(e.key==='Enter') { 
+    e.preventDefault(); 
+    if(custActive>=0) itemsEls[custActive].click(); 
+  }
+  else if(e.key==='Escape') { 
+    hideCustSuggestions(); 
+  }
+}
+
+function selectCustomer(c) {
+  selectedCustomer = c;
+  custInput.value = c.customerName || '';
+}
+
+/* ---------- Item Search ---------- */
+const itemInput = document.getElementById('itemSearch');
+const itemsBox = document.getElementById('itemsDropdown');
+let itemActive = -1;
+
+itemInput.addEventListener('input', onItemInput);
+itemInput.addEventListener('keydown', onItemKeyDown);
+itemInput.addEventListener('focus', () => showItemsDropdown(items.slice(0,50)));
+document.addEventListener('click', (e) => {
+  if(!itemInput.contains(e.target) && !itemsBox.contains(e.target)) hideItemsDropdown();
+});
+
+function onItemInput(e) {
+  const q = e.target.value.trim().toLowerCase();
+  if(!q) return showItemsDropdown(items.slice(0,50));
+  const filtered = items.filter(it => 
+    (it.itemName||'').toLowerCase().includes(q) || 
+    (it.itemCode||'').toLowerCase().includes(q)
+  );
+  showItemsDropdown(filtered.slice(0,50));
+}
+
+function showItemsDropdown(list) {
+  itemsBox.innerHTML = ''; 
+  itemActive = -1;
+  if(!list || list.length===0) { itemsBox.style.display='none'; return; }
+  
+  list.forEach((it, idx) => {
+    const div = document.createElement('div');
+    div.className = 'item-row d-flex justify-content-between';
+    div.innerHTML = `
+      <div><strong>${escapeHtml(it.itemName)}</strong></div>
+      <div class="align-self-center"></div>
+    `;
+    div.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      addItemToCart({ 
+        itemCode: it.itemCode, 
+        itemName: it.itemName, 
+        itemPrice: Number(it.price), 
+        quantity: Number(document.getElementById('manualQty').value) || 1 
+      });
+      hideItemsDropdown();
+      itemInput.value = '';
+    });
+    div.addEventListener('mouseenter', () => setItemActive(idx));
+    itemsBox.appendChild(div);
+  });
+  itemsBox.style.display = 'block';
+}
+
+function hideItemsDropdown() { 
+  itemsBox.style.display = 'none'; 
+  itemActive = -1; 
+}
+
+function setItemActive(i) {
+  const nodes = itemsBox.querySelectorAll('.item-row');
+  nodes.forEach(x => x.classList.remove('active'));
+  if(i >= 0 && i < nodes.length) { 
+    nodes[i].classList.add('active'); 
+    itemActive = i; 
+    nodes[i].scrollIntoView({block:'nearest'}); 
+  }
+}
+
+function onItemKeyDown(e) {
+  const nodes = itemsBox.querySelectorAll('.item-row');
+  if(!nodes || nodes.length===0) return;
+  
+  if(e.key==='ArrowDown') { 
+    e.preventDefault(); 
+    setItemActive((itemActive+1)%nodes.length); 
+  }
+  else if(e.key==='ArrowUp') { 
+    e.preventDefault(); 
+    setItemActive((itemActive-1+nodes.length)%nodes.length); 
+  }
+  else if(e.key==='Enter') { 
+    e.preventDefault(); 
+    if(itemActive>=0) nodes[itemActive].click(); 
+  }
+  else if(e.key==='Escape') { 
+    hideItemsDropdown(); 
+  }
+}
+
+/* ---------- Cart Operations ---------- */
+function addItemToCart(row) {
+  // If item exists in cart, update quantity
+  const idx = cart.findIndex(c => 
+    c.itemCode && row.itemCode && 
+    c.itemCode === row.itemCode && 
+    c.itemPrice === row.itemPrice
+  );
+  
+  if(idx >= 0) {
+    cart[idx].quantity = Number(cart[idx].quantity) + Number(row.quantity || 1);
+  } else {
+    cart.push({
+      itemCode: row.itemCode || '',
+      itemName: row.itemName || 'Unnamed',
+      itemPrice: Number(row.itemPrice || 0),
+      quantity: Number(row.quantity || 1)
+    });
+  }
+  renderCart();
+}
+
+document.getElementById('addManualBtn').addEventListener('click', (e) => {
+  e.preventDefault();
+  const name = (document.getElementById('itemSearch').value || '').trim();
+  const code = ''; // Manual new item - backend will auto-create
+  const price = Number(document.getElementById('manualPrice').value || 0);
+  const qty = Number(document.getElementById('manualQty').value || 1);
+  
+  if(!name || price <= 0 || qty <= 0) { 
+    alert('Provide item name, unit price and quantity'); 
+    return; 
+  }
+  
+  addItemToCart({ 
+    itemCode: code, 
+    itemName: name, 
+    itemPrice: price, 
+    quantity: qty 
+  });
+  
+  document.getElementById('itemSearch').value = '';
+  document.getElementById('manualPrice').value = '';
+  document.getElementById('manualQty').value = 1;
+});
+
+function renderCart() {
+  const tbody = document.getElementById('cartBody');
+  tbody.innerHTML = '';
+  
+  cart.forEach((c, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${escapeHtml(c.itemName)}</td>
+      <td class="text-right">${money(c.itemPrice)}</td>
+      <td><input class="form-control form-control-sm qty-input" data-index="${i}" type="number" min="1" value="${c.quantity}"></td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  // Attach quantity change listeners
+  tbody.querySelectorAll('.qty-input').forEach(inp => {
+    inp.addEventListener('change', (e) => {
+      const idx = Number(e.target.dataset.index);
+      let v = Number(e.target.value || 1);
+      if(v < 1) v = 1;
+      cart[idx].quantity = v;
+      renderCart();
+    });
+  });
+}
+
+/* ---------- Save Operations ---------- */
+function buildPayload() {
+  if(!selectedCustomer) {
+    const typed = (document.getElementById('customerSearch').value || '').trim();
+    if(!typed) { throw new Error('Please select a customer'); }
+    
+    const match = customers.find(c => 
+      (c.customerName||'').toLowerCase() === typed.toLowerCase()
+    );
+    if(match) selectedCustomer = match;
+    else throw new Error('Please choose a valid customer from suggestions');
+  }
+  
+  if(cart.length === 0) throw new Error('Cart is empty');
+
+  return {
+    customerId: selectedCustomer.customerId,
+    discountPercentage: Number(document.getElementById('discountInput').value || 0),
+    purchaseItems: cart.map(c => ({
+      itemCode: c.itemCode || '',
+      itemName: c.itemName,
+      itemPrice: c.itemPrice,
+      quantity: c.quantity
+    }))
+  };
+}
+
+document.getElementById('saveBtn').addEventListener('click', async () => {
+  try {
+    const payload = buildPayload();
+    const res = await fetch('http://localhost:8083/api/v1/purchase/save', {
+      method: 'POST', 
+      headers: {'Content-Type':'application/json'}, 
+      body: JSON.stringify(payload)
+    });
+    
+    if(!res.ok) {
+      const txt = await res.text();
+      throw new Error(txt || 'Save failed');
+    }
+    
+    const data = await res.json();
+    alert('Saved. Purchase Code: ' + (data.purchaseCode || 'N/A'));
+  } catch(err) {
+    alert('Save error: ' + (err.message||err));
+    console.error(err);
+  }
+});
+
+document.getElementById('saveCalcBtn').addEventListener('click', async () => {
+  try {
+    const payload = buildPayload();
+    const res = await fetch('http://localhost:8083/api/v1/purchase/save', {
+      method: 'POST', 
+      headers: {'Content-Type':'application/json'}, 
+      body: JSON.stringify(payload)
+    });
+    
+    if(!res.ok) {
+      const txt = await res.text();
+      throw new Error(txt || 'Save failed');
+    }
+    
+    const data = await res.json();
+    showInvoiceModal(data);
+    $('#invoiceModal').modal('show');
+  } catch(err) {
+    alert('Save & Calculate error: ' + (err.message||err));
+    console.error(err);
+  }
+});
+
+/* ---------- Invoice Modal ---------- */
+showInvoiceModal()
+
+document.getElementById('printInvoiceBtn').addEventListener('click', () => {
+  window.print();
+});
+
+// Clear form when modal is closed
+$('#invoiceModal').on('hidden.bs.modal', function () {
+  clearAll();
+});
+
+/* ---------- Clear Form ---------- */
+document.getElementById('clearBtn').addEventListener('click', (e) => {
+  e.preventDefault();
+  if(confirm('Clear form and cart?')) clearAll();
+});
+
+function clearAll() {
+  cart = [];
+  selectedCustomer = null;
+  document.getElementById('billingForm').reset();
+  document.getElementById('customerSearch').value = '';
+  document.getElementById('itemSearch').value = '';
+  renderCart();
+  hideCustSuggestions();
+  hideItemsDropdown();
+}
+</script>
 </body>
 </html>

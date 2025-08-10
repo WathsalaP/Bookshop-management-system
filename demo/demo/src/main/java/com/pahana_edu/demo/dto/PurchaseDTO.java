@@ -12,6 +12,7 @@ public class PurchaseDTO {
     private int quantity;
     private BigDecimal discount;
     private String purchasedDateTime;
+    private BigDecimal lineTotal;
 
     // Getters and setters
 
@@ -85,5 +86,13 @@ public class PurchaseDTO {
 
     public void setPurchasedDateTime(String purchasedDateTime) {
         this.purchasedDateTime = purchasedDateTime;
+    }
+
+    public BigDecimal getLineTotal() {
+        return lineTotal;
+    }
+
+    public void setLineTotal(BigDecimal lineTotal) {
+        this.lineTotal = lineTotal;
     }
 }

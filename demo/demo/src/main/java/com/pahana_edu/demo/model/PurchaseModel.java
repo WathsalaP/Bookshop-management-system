@@ -36,10 +36,14 @@ public class PurchaseModel {
     @Column(precision = 10, scale = 2)
     private BigDecimal discount; // discount % for this purchase line
 
+    @Column(name = "line_total", precision = 10, scale = 2)
+    private BigDecimal lineTotal;
+
     private LocalDateTime purchasedDateTime;
 
     @PrePersist
     protected void onCreate() {
         this.purchasedDateTime = LocalDateTime.now();
+        this.lineTotal = this.itemPrice.multiply(BigDecimal.valueOf(this.quantity));
     }
 }

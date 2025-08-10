@@ -33,11 +33,11 @@ public class ItemDTO {
         this.itemName = itemName;
     }
 
-    public BigDecimal getPrice() { // CHANGED
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) { // CHANGED
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
