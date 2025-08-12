@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Dashboard - Pahana Edu</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link rel="stylesheet" href="style2.css">
   <!-- jQuery and Bootstrap -->
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -19,7 +20,7 @@
         <li class="nav-item"><a href="manage-items.html" class="nav-link">Manage Items</a></li>
         <li class="nav-item"><a href="billing.html" class="nav-link">Billing</a></li>
         <li class="nav-item"><a href="help.html" class="nav-link">Help</a></li>
-        <li class="nav-item"><a href="pages/login.html" class="nav-link">Logout</a></li>
+        <li class="nav-item"><a href="login.html" class="nav-link">Logout</a></li>
       </ul>
       <button id="menu-open-button" class="fas fa-bars"></button>
     </nav>
@@ -27,10 +28,10 @@
 
   <img class="logo" src="https://c0.wallpaperflare.com/preview/484/270/562/read-book-books-book-store.jpg" />
 
-  <div class="container">
+  <div class="billing-wrapper">
     <div class="form-box">
       <h2 class="mb-4">Billing</h2>
-      <div class="card-body">
+      <div class="billing-form">
         <form id="billingForm" autocomplete="off" onsubmit="return false;">
           <div class="form-row">
             <div class="form-group col-md-4 position-relative">
@@ -45,13 +46,9 @@
             </div>
 
             <div class="form-group col-md-3">
-              <label for="invoiceDate">Date</label>
-              <input id="invoiceDate" type="datetime-local" class="form-control" />
+              <input id="invoiceDate" type="hidden" class="form-control" />
             </div>
 
-            <div class="form-group col-md-3 text-right align-self-end">
-              <button id="clearBtn" class="btn btn-outline-secondary">Clear</button>
-            </div>
           </div>
 
           <!-- Item add section -->
@@ -65,12 +62,20 @@
               
               <input id="manualPrice" type="hidden" step="0.01" min="0" class="form-control" placeholder="Price" />
             </div>
-            <div class="form-group col-md-2">
-              
-              <input id="manualQty" type="hidden" min="1" value="1" class="form-control" />
+            
+            <div>
+              <label for="Qtylabel" class="col-form-label">Quantity</label>
+            <input id="manualQty" class="form-control form-control-sm" 
+              type="number" 
+              min="1" 
+              value="1">
             </div>
             <div class="form-group col-md-2">
               <button id="addManualBtn" class="btn btn-primary btn-block">Add</button>
+
+              <div class="form-group col-md-3 text-right align-self-end">
+              <button id="clearBtn" class="btn btn-outline-secondary">Clear</button>
+            </div>
             </div>
           </div>
         </form>
@@ -78,16 +83,18 @@
     </div>
 
     <!-- Cart table (simplified) -->
-    <div class="card mb-3">
-      <div class="card-body">
-        <h5>Your Cart</h5>
+    <div class="myCart">
+              <h2>Your Cart</h2>
+      <div class="cart-table">
         <div class="table-responsive">
           <table class="receipt-table">
             <thead class="thead-dark">
               <tr>
-                <th>Item</th>
-                <th class="text-right">Price</th>
-                <th class="text-center">Qty</th>
+                <th class="text-center">Item</th>
+                <th class="text-center">Price</th>
+                <th class="text-center">Quantity</th>
+                <th class="text-center">Line Total</th>
+                <th class="text-center">Action</th>
               </tr>
             </thead>
             <tbody id="cartBody">
@@ -95,86 +102,104 @@
             </tbody>
           </table>
         </div>
-
-        <div class="text-right">
-          <button id="saveBtn" class="btn btn-success">Save</button>
-          <button id="saveCalcBtn" class="btn btn-primary">Save & Calculate (Invoice)</button>
+        <div class="button-group">
+          <div class="myButtons">
+            <button id="saveBtn" class="btn btn-success">Save</button>
+            <button id="saveCalcBtn" class="btn btn-primary">Finish</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Invoice Modal -->
-<div class="modal fade" id="invoiceModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Invoice</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+<div class="box">
+  <div class="modal fade" id="invoiceModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="myclose" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+    <div class="modal-body" id="invoiceBody">
+      <div class="invoice-header">
+          <h2>PAHANA EDU</h2>
+          <p>123 Book Street,</p>
+          <p>Colombo,</p>
+          <p>Sri Lanka.</p>
       </div>
-
-  <div class="modal-body" id="invoiceBody">
-    <div class="invoice-header">
-        <h2>PAHANA EDU</h2>
-        <p>123 Book Street, Colombo, Sri Lanka</p>
-    </div>
-    
-    <div class="invoice-meta">
-        <div>
-            <strong>Invoice #:</strong> <span id="invoiceNumber"></span><br>
-            <strong>Date:</strong> <span id="invoiceDateDisplay"></span>
-        </div>
-        <div>
-            <strong>Customer:</strong> <span id="invoiceCustomer"></span><br>
-        </div>
-    </div>
-    
-    <table class="receipt-table">
-        <thead>
-            <tr>
-                <th>Description</th>
-                <th class="text-right">Unit Price</th>
-                <th class="text-center">Qty</th>
-                <th class="text-right">Amount</th>
-            </tr>
-        </thead>
-        <tbody id="invoiceItems">
-            <!-- Items will be added here dynamically -->
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="3" class="text-right"><strong>Subtotal:</strong></td>
-                <td class="text-right" id="invoiceSubtotal"></td>
-            </tr>
-            <tr>
-                <td colspan="3" class="text-right"><strong>Discount:</strong></td>
-                <td class="text-right" id="invoiceDiscount"></td>
-            </tr>
-            <tr class="receipt-total">
-                <td colspan="3" class="text-right"><strong>TOTAL:</strong></td>
-                <td class="text-right" id="invoiceTotal"></td>
-            </tr>
-        </tfoot>
-    </table>
-    
-    <div class="text-center mt-4">
-        <p>Thank you for your purchase!</p>
-        <p>Terms: Payment due within 7 days</p>
-    </div>
+      
+      <div class="invoice-meta">
+          <div>
+              <strong>Invoice #:</strong> <span id="invoiceNumber"></span><br>
+              <strong>Date:</strong> <span id="invoiceDateDisplay"></span>
+          </div>
+          <div>
+              <strong>Customer:</strong> <span id="invoiceCustomer"></span><br>
+          </div>
+      </div>
+      
+      <table class="receipt-table">
+          <thead>
+              <tr>
+                  <th class="text-center">Description</th>
+                  <th class="text-center">Unit Price</th>
+                  <th class="text-center">Quantity</th>
+                  <th class="text-center">Amount</th>
+              </tr>
+          </thead>
+          <tbody id="invoiceItems">
+              <!-- Items will be added here dynamically -->
+          </tbody>
+          <tfoot>
+              <tr>
+                  <td colspan="3" class="text-right"><strong>Subtotal:</strong></td>
+                  <td class="text-right" id="invoiceSubtotal"></td>
+              </tr>
+              <tr>
+                  <td colspan="3" class="text-right"><strong>Discount:</strong></td>
+                  <td class="text-right" id="invoiceDiscount"></td>
+              </tr>
+              <tr class="receipt-total">
+                  <td colspan="3" class="text-right"><strong>TOTAL:</strong></td>
+                  <td class="text-right" id="invoiceTotal"></td>
+              </tr>
+          </tfoot>
+      </table>
+      
+      <div class="text-center mt-4">
+          <p>Thank you for your purchase!</p>
+      </div>
+      <span id="close" class="hidden"></span>
+  </div>
 </div>
-
       
       <div class="modal-footer">
         <button id="printInvoiceBtn" type="button" class="btn btn-secondary">
           <i class="fas fa-print"></i> Print
         </button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
 </div>
+
+  <script type="text/JavaScript">
+    // Only need to handle the cross button now
+document.querySelector('#close').addEventListener('click', () => {
+  document.querySelector('.box').style.display = 'none';
+  // Also hide the Bootstrap modal properly
+  $('#invoiceModal').modal('hide');
+});
+
+// Save & Calculate button handler
+document.querySelector('#saveCalcBtn').addEventListener('click', () => {
+  // Show both the box and Bootstrap modal
+  document.querySelector('.box').style.display = 'block';
+  $('#invoiceModal').modal('show');
+});
+  </script>
 
   <script src="billing.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -185,6 +210,7 @@ let customers = []; // Loaded from backend
 let items = [];     // Loaded from backend
 let cart = [];      // { itemCode, itemName, itemPrice, quantity }
 let selectedCustomer = null;
+let selectedItemForCart = null;
 
 /* ---------- Helper Functions ---------- */
 function fetchJson(url) {
@@ -332,19 +358,17 @@ function showItemsDropdown(list) {
     div.className = 'item-row d-flex justify-content-between';
     div.innerHTML = `
       <div><strong>${escapeHtml(it.itemName)}</strong></div>
-      <div class="align-self-center"></div>
     `;
+    
     div.addEventListener('click', (ev) => {
       ev.preventDefault();
-      addItemToCart({ 
-        itemCode: it.itemCode, 
-        itemName: it.itemName, 
-        itemPrice: Number(it.price), 
-        quantity: Number(document.getElementById('manualQty').value) || 1 
-      });
+      selectedItemForCart = it;
+      itemInput.value = it.itemName;
+      document.getElementById('manualPrice').value = it.price;
+      document.getElementById('manualQty').focus();
       hideItemsDropdown();
-      itemInput.value = '';
     });
+    
     div.addEventListener('mouseenter', () => setItemActive(idx));
     itemsBox.appendChild(div);
   });
@@ -379,8 +403,17 @@ function onItemKeyDown(e) {
     setItemActive((itemActive-1+nodes.length)%nodes.length); 
   }
   else if(e.key==='Enter') { 
-    e.preventDefault(); 
-    if(itemActive>=0) nodes[itemActive].click(); 
+    e.preventDefault();
+    if(itemActive>=0) {
+      // Store the selected item but don't add to cart yet
+      selectedItemForCart = items.find(it => 
+        it.itemName === nodes[itemActive].querySelector('strong').textContent
+      );
+      if (selectedItemForCart) {
+        document.getElementById('manualPrice').value = selectedItemForCart.price;
+        document.getElementById('manualQty').focus();
+      }
+    }
   }
   else if(e.key==='Escape') { 
     hideItemsDropdown(); 
@@ -409,51 +442,112 @@ function addItemToCart(row) {
   renderCart();
 }
 
-document.getElementById('addManualBtn').addEventListener('click', (e) => {
+document.getElementById('manualQty').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    if (!selectedItemForCart) {
+      alert('Please select an item first');
+      return;
+    }
+    
+    const qty = Number(this.value) || 1;
+    if (qty <= 0) {
+      alert('Quantity must be at least 1');
+      return;
+    }
+    
+    addItemToCart({
+      itemCode: selectedItemForCart.itemCode,
+      itemName: selectedItemForCart.itemName,
+      itemPrice: Number(selectedItemForCart.price),
+      quantity: qty
+    });
+    
+    // Reset for next item
+    selectedItemForCart = null;
+    itemInput.value = '';
+    document.getElementById('manualPrice').value = '';
+    this.value = '1';
+    itemInput.focus();
+  }
+});
+
+document.getElementById('addManualBtn').addEventListener('click', function(e) {
   e.preventDefault();
-  const name = (document.getElementById('itemSearch').value || '').trim();
-  const code = ''; // Manual new item - backend will auto-create
-  const price = Number(document.getElementById('manualPrice').value || 0);
-  const qty = Number(document.getElementById('manualQty').value || 1);
-  
-  if(!name || price <= 0 || qty <= 0) { 
-    alert('Provide item name, unit price and quantity'); 
-    return; 
+  if (!selectedItemForCart) {
+    const name = (document.getElementById('itemSearch').value || '').trim();
+    if (!name) {
+      alert('Please select or search for an item first');
+      return;
+    }
+    // For manual items not in the system
+    selectedItemForCart = {
+      itemCode: '',
+      itemName: name,
+      price: Number(document.getElementById('manualPrice').value || 0)
+    };
   }
   
-  addItemToCart({ 
-    itemCode: code, 
-    itemName: name, 
-    itemPrice: price, 
-    quantity: qty 
+  const qty = Number(document.getElementById('manualQty').value) || 1;
+  if (qty <= 0) {
+    alert('Quantity must be at least 1');
+    return;
+  }
+  
+  addItemToCart({
+    itemCode: selectedItemForCart.itemCode,
+    itemName: selectedItemForCart.itemName,
+    itemPrice: Number(selectedItemForCart.price),
+    quantity: qty
   });
   
-  document.getElementById('itemSearch').value = '';
+  // Reset for next item
+  selectedItemForCart = null;
+  itemInput.value = '';
   document.getElementById('manualPrice').value = '';
-  document.getElementById('manualQty').value = 1;
+  document.getElementById('manualQty').value = '1';
+  itemInput.focus();
 });
 
 function renderCart() {
   const tbody = document.getElementById('cartBody');
   tbody.innerHTML = '';
   
-  cart.forEach((c, i) => {
+  let subtotal = 0;
+  
+  cart.forEach((item, index) => {
+    const lineTotal = item.itemPrice * item.quantity;
+    subtotal += lineTotal;
+    
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td>${escapeHtml(c.itemName)}</td>
-      <td class="text-right">${money(c.itemPrice)}</td>
-      <td><input class="form-control form-control-sm qty-input" data-index="${i}" type="number" min="1" value="${c.quantity}"></td>
+      <td>${escapeHtml(item.itemName)}</td>
+      <td class="text-right">${money(item.itemPrice)}</td>
+      <td class="text-center">${item.quantity}</td> 
+      <td class="text-right">${money(lineTotal)}</td>
+      <td class="text-center">
+        <button class="btn btn-sm btn-danger remove-btn" data-index="${index}">
+          <i class="fas fa-trash-alt"></i>
+        </button>
+      </td>
     `;
     tbody.appendChild(tr);
   });
 
-  // Attach quantity change listeners
-  tbody.querySelectorAll('.qty-input').forEach(inp => {
-    inp.addEventListener('change', (e) => {
-      const idx = Number(e.target.dataset.index);
-      let v = Number(e.target.value || 1);
-      if(v < 1) v = 1;
-      cart[idx].quantity = v;
+  // Add event listeners for new elements
+  tbody.querySelectorAll('.qty-input').forEach(input => {
+    input.addEventListener('change', (e) => {
+      const idx = e.target.dataset.index;
+      const newQty = Math.max(1, parseInt(e.target.value) || 1);
+      cart[idx].quantity = newQty;
+      renderCart(); // Re-render to update line totals
+    });
+  });
+
+  tbody.querySelectorAll('.remove-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const idx = e.target.closest('button').dataset.index;
+      cart.splice(idx, 1);
       renderCart();
     });
   });
@@ -532,7 +626,62 @@ document.getElementById('saveCalcBtn').addEventListener('click', async () => {
 });
 
 /* ---------- Invoice Modal ---------- */
-showInvoiceModal()
+function showInvoiceModal(data) {
+    // Set header information (your existing code)
+    document.getElementById('invoiceNumber').textContent = data.purchaseCode || 'N/A';
+    document.getElementById('invoiceCustomer').textContent = selectedCustomer?.customerName || 'Walk-in Customer';
+    document.getElementById('invoiceDateDisplay').textContent = new Date().toLocaleDateString();
+    
+    // Calculate totals (your existing code)
+    let subtotal = 0;
+    const itemsList = data.purchaseItems || cart;
+    
+    // Clear and rebuild items table (your existing code)
+    const invoiceItems = document.getElementById('invoiceItems');
+    invoiceItems.innerHTML = '';
+    
+    itemsList.forEach(item => {
+        const row = document.createElement('tr');
+        const lineTotal = item.itemPrice * item.quantity;
+        subtotal += lineTotal;
+        
+        row.innerHTML = `
+            <td>${escapeHtml(item.itemName)}</td>
+            <td class="text-right">${money(item.itemPrice)}</td>
+            <td class="text-center">${item.quantity}</td>
+            <td class="text-right">${money(lineTotal)}</td>
+        `;
+        invoiceItems.appendChild(row);
+    });
+    
+    // Calculate discount and total (your existing code with slight format improvement)
+    const discountPercentage = Number(document.getElementById('discountInput').value || 0);
+    const discountAmount = subtotal * discountPercentage / 100;
+    const total = subtotal - discountAmount;
+    
+    // Set totals (your existing format)
+    document.getElementById('invoiceSubtotal').textContent = money(subtotal);
+    document.getElementById('invoiceDiscount').textContent = `-${money(discountAmount)} (${discountPercentage}%)`;
+    document.getElementById('invoiceTotal').textContent = money(total);
+    
+    /* NEW ADDITIONS FOR MODAL FUNCTIONALITY */
+    // Print button handler
+    document.getElementById('printInvoiceBtn').onclick = function() {
+        const printContent = document.getElementById('invoiceBody').innerHTML;
+        const originalContent = document.body.innerHTML;
+        
+        document.body.innerHTML = `
+            <div class="container p-4">${printContent}</div>
+            <button onclick="window.location.reload()" class="btn btn-primary no-print">Back</button>
+        `;
+        window.print();
+        document.body.innerHTML = originalContent;
+        $('#invoiceModal').modal('show'); // Reopen modal after printing
+    };
+    
+    // Finally show the modal (new addition)
+    $('#invoiceModal').modal('show');
+}
 
 document.getElementById('printInvoiceBtn').addEventListener('click', () => {
   window.print();

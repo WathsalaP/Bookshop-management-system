@@ -13,6 +13,7 @@ public class UserDTO {
     private String username;
     private String email;
     private String phone_number;
+    private String password;
 
     // Getters and Setters
     public String getUserid() {
@@ -44,6 +45,14 @@ public class UserDTO {
 
     public void setPhone_number(String phone_number) {
         this.phone_number = phone_number;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
 }

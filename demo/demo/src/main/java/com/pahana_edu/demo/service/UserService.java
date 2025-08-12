@@ -42,6 +42,7 @@ public class UserService {
             existingUser.setUsername(userDTO.getUsername());
             existingUser.setEmail(userDTO.getEmail());
             existingUser.setPhone_number(userDTO.getPhone_number());
+            existingUser.setPassword(userDTO.getPassword());
 
             userRepo.save(existingUser);
             return userDTO;
