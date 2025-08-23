@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="style.css">
+    <script src="authService.js" defer></script>
     <script src="login.js" defer></script>
 </head>
-<div id="header-placeholder"></div>
 <body>
-    <form class="box" onsubmit="return validate();">
+    <form class="box" onsubmit="return validate(event);">
         <h1>Login</h1>
         <input type="text" id="username" name="username" placeholder="Enter username" required>
         <input type="password" id="password" name="password" placeholder="Enter password" required>

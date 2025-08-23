@@ -1,45 +1,48 @@
 async function validate(event) {
-    event.preventDefault(); // Prevent form submission
+    event.preventDefault();
+    console.log('Login function started');
     
-    // Get input values (using your existing IDs)
     const username = document.getElementById("username").value.trim();
     const password = document.getElementById("password").value.trim();
+    console.log('Username:', username, 'Password:', password);
 
-    // 1. First check hard-coded admin credentials
+    // Admin login
     if (username === "Sanduni" && password === "123") {
-        window.location.href = "SystemUser.html"; // Redirect to admin page
-        return true;
+        console.log('Admin login successful');
+        window.authService.login({
+            username: username,
+            role: 'admin'
+        });
+        window.location.href = "SystemUser.html";
+        return;
+    } else {
+        alert("Invalid admin credentials");
     }
 
-    // 2. Check regular users against API
+    // Regular user login
     try {
+        console.log('Trying regular user login');
         const response = await fetch('http://localhost:8083/api/v1/getusers');
-        
-        if (!response.ok) {
-            throw new Error('Failed to fetch users');
-        }
-
         const users = await response.json();
-
-        // Find matching user (exact match)
+        console.log('Users from API:', users);
+        
         const matchedUser = users.find(user => 
-            user.username === username && 
-            user.password === password
+            user.username === username && user.password === password
         );
 
         if (matchedUser) {
-            window.location.href = "customer-details.html"; // Redirect to user page
-            return true;
+            console.log('User login successful:', matchedUser);
+            window.authService.login({
+                username: matchedUser.username,
+                role: 'user'
+            });
+            window.location.href = "customer-details.html";
         } else {
+            console.log('No matching user found');
             alert("Invalid username or password");
-            return false;
         }
     } catch (error) {
-        console.error("Login error:", error);
-        alert("Error connecting to server. Please try again later.");
-        return false;
+        console.error('Login error:', error);
+        alert("Login failed. Please try again.");
     }
 }
-
-// Attach event listener to your form
-document.querySelector('form').addEventListener('submit', validate);
