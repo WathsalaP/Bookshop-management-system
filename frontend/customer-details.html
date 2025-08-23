@@ -6,6 +6,9 @@
 
 
 <link rel="stylesheet" href="style2.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+
 
 <!-- jQuery library -->
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script> 
@@ -87,28 +90,45 @@
 </div>
 
 <script>
+  let iti; // global variable
+
+document.addEventListener("DOMContentLoaded", () => {
+  const input = document.querySelector("#phoneNumber");
+  iti = window.intlTelInput(input, {
+    initialCountry: "auto",
+    geoIpLookup: function(success, failure) {
+      fetch("https://ipapi.co/json")
+        .then(res => res.json())
+        .then(data => success(data.country_code))
+        .catch(() => success("US"));
+    },
+    utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+  });
+});
+
 //validate
 function validateForm() {
-    const phoneNumber = document.getElementById('phoneNumber').value.trim();
 
-    const phonePattern = /^[0-9]{10}$/;
-    if (!phonePattern.test(phoneNumber)) {
-        alert("Please enter a valid 10-digit phone number.");
-        return false;
-    }
+    // ✅ Check if number is valid
+    if (!iti || !iti.isValidNumber()) {
+    alert("❌ Please enter a valid phone number with country code.");
+    return false;
+  }
 
     return true;
 }
 
   //Add customer
 document.getElementById('addCustomerBtn').addEventListener('click', function(e) {
+    e.preventDefault();
     if (!validateForm()) return;
     
     const formData = {
         customerId: document.getElementById('customerId').value,
         customerName: document.getElementById('customerName').value,
         customerAddress: document.getElementById('customerAddress').value,
-        phoneNumber: document.getElementById('phoneNumber').value
+        phoneNumber: iti.getNumber()  // ✅ full number with country code
+
     };
 
     fetch('http://localhost:8083/api/v1/addcustomer', { // http://localhost:4567/api/customer
@@ -136,6 +156,7 @@ document.getElementById('addCustomerBtn').addEventListener('click', function(e) 
 });
 // Update customer
 document.getElementById('updateCustomerBtn').addEventListener('click', function (e) {
+    e.preventDefault();
     if (!validateForm()) return;
 
     const customerId = document.getElementById('customerId').value;
@@ -143,7 +164,8 @@ document.getElementById('updateCustomerBtn').addEventListener('click', function 
         customerId: customerId,
         customerName: document.getElementById('customerName').value,
         customerAddress: document.getElementById('customerAddress').value,
-        phoneNumber: document.getElementById('phoneNumber').value
+        phoneNumber: iti.getNumber()  // ✅ full number with country code
+
     };
 
     fetch(`http://localhost:8083/api/v1/updatecustomer/${customerId}`, {

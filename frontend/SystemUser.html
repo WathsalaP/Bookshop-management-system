@@ -7,6 +7,8 @@
 
 
 <link rel="stylesheet" href="style2.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
 
 <!-- jQuery library  -->
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>        
@@ -96,10 +98,25 @@
     </div>
 
     <script>
+        let iti; // global variable
+
+document.addEventListener("DOMContentLoaded", () => {
+  const input = document.querySelector("#phone_number");
+  iti = window.intlTelInput(input, {
+    initialCountry: "auto",
+    geoIpLookup: function(success, failure) {
+      fetch("https://ipapi.co/json")
+        .then(res => res.json())
+        .then(data => success(data.country_code))
+        .catch(() => success("US"));
+    },
+    utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+  });
+});
       //validation
       function validateForm() {
           const email = document.getElementById('email').value;
-          const phoneNumber = document.getElementById('phone_number').value;
+          const phone_number = document.getElementById('phone_number').value;
 
           // Simple email format validation
           const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -109,24 +126,24 @@
           }
 
           // Phone number validation (10 digits)
-          const phonePattern = /^[0-9]{10}$/;
-          if (!phonePattern.test(phoneNumber)) {
-              alert("Please enter a valid 10-digit phone number.");
-              return false;
+          if (!iti || !iti.isValidNumber()) {
+            alert("❌ Please enter a valid phone number with country code.");
+            return false;
           }
 
-          return true;
+            return true;
       }
 
       //Add user
     document.getElementById('addUserBtn').addEventListener('click', function(e) {
+        e.preventDefault();
         if (!validateForm()) return;
         
         const formData = {
             userid: document.getElementById('userid').value,
             username: document.getElementById('username').value,
             email: document.getElementById('email').value,
-            phone_number: document.getElementById('phone_number').value,
+            phone_number: iti.getNumber(),  // ✅ full number with country code
             password: document.getElementById('password').value
         };
 
@@ -155,6 +172,7 @@
     });
     // Update User
     document.getElementById('updateUserBtn').addEventListener('click', function (e) {
+        e.preventDefault();
         if (!validateForm()) return;
 
         const userid = document.getElementById('userid').value;
@@ -162,7 +180,7 @@
             userid: userid,
             username: document.getElementById('username').value,
             email: document.getElementById('email').value,
-            phone_number: document.getElementById('phone_number').value,
+            phone_number: iti.getNumber(),  // ✅ full number with country code
             password: document.getElementById('password').value
         };
 
