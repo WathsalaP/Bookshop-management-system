@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Dashboard - Pahana Edu</title>
+  <meta charset="UTF-8">
+  <title>Pahana Edu</title>
 
 
 <link rel="stylesheet" href="style2.css">
@@ -86,9 +87,22 @@
 </div>
 
 <script>
+//validate
+function validateForm() {
+    const phoneNumber = document.getElementById('phoneNumber').value.trim();
+
+    const phonePattern = /^[0-9]{10}$/;
+    if (!phonePattern.test(phoneNumber)) {
+        alert("Please enter a valid 10-digit phone number.");
+        return false;
+    }
+
+    return true;
+}
+
   //Add customer
 document.getElementById('addCustomerBtn').addEventListener('click', function(e) {
-    e.preventDefault();
+    if (!validateForm()) return;
     
     const formData = {
         customerId: document.getElementById('customerId').value,
@@ -122,7 +136,7 @@ document.getElementById('addCustomerBtn').addEventListener('click', function(e) 
 });
 // Update customer
 document.getElementById('updateCustomerBtn').addEventListener('click', function (e) {
-    e.preventDefault();
+    if (!validateForm()) return;
 
     const customerId = document.getElementById('customerId').value;
     const updatedData = {
