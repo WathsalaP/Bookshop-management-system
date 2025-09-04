@@ -15,5 +15,6 @@
             "password": "Admin@1234",
             "connectionTimeout": 60
         }
-    ]
+    ],
+    "java.configuration.updateBuildConfiguration": "interactive"
 }

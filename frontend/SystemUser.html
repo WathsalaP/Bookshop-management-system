@@ -72,7 +72,7 @@
           <input type="tel" id="phone_number" name="phone_number" required pattern="[0-9]{10}">
 
           <label for="password">Password:</label>
-          <input type="text" id="password" name="password" required>
+          <input type="password" id="password" name="password" required>
 
           <button type="button" id="addUserBtn">Add User</button>
           <button type="button" id="updateUserBtn">Update User</button>     
@@ -87,7 +87,6 @@
               <th>User Name</th>
               <th>Email</th>
               <th>Phone Number</th>
-              <th>Password</th>
             </tr>
           </thead>
           <tbody id="user_model">
@@ -220,7 +219,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         <td>${user.username}</td>
                         <td>${user.email}</td>
                         <td>${user.phone_number}</td>
-                        <td>${user.password}</td>
+                        
                     `;
                     tableBody.appendChild(row);
 

@@ -31,7 +31,6 @@ public class PurchaseService {
     @Autowired
     private ModelMapper modelMapper;
 
-
     public String savePurchaseAndCalculate(String customerId, BigDecimal discountPercentage,
             List<PurchaseDTO> purchaseDTOList) {
         String purchaseCode = generatePurchaseCode();
@@ -59,12 +58,11 @@ public class PurchaseService {
 
             // FIX: Preserve original unit price in the model
             PurchaseModel purchaseModel = modelMapper.map(purchaseDTO, PurchaseModel.class);
-            
+
             // Add lineTotal field if your model has it, otherwise calculate when needed
             purchaseModel.setLineTotal(
-                purchaseDTO.getItemPrice().multiply(BigDecimal.valueOf(purchaseDTO.getQuantity()))
-            );
-            
+                    purchaseDTO.getItemPrice().multiply(BigDecimal.valueOf(purchaseDTO.getQuantity())));
+
             purchaseRepo.save(purchaseModel);
         }
 
@@ -92,12 +90,12 @@ public class PurchaseService {
             BigDecimal lineTotal = p.getItemPrice().multiply(BigDecimal.valueOf(p.getQuantity()));
             total = total.add(lineTotal);
         }
-        
+
         if (discountPercentage != null && discountPercentage.compareTo(BigDecimal.ZERO) > 0) {
             BigDecimal discountAmount = total.multiply(discountPercentage).divide(BigDecimal.valueOf(100));
             total = total.subtract(discountAmount);
         }
-        
+
         return total.compareTo(BigDecimal.ZERO) < 0 ? BigDecimal.ZERO : total;
     }
 
@@ -113,5 +111,5 @@ public class PurchaseService {
         }
         return "PRCHS" + nextNum;
     }
-    
+
 }

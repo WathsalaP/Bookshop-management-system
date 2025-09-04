@@ -255,10 +255,22 @@ tbody tr:hover {
         position: absolute;
         right: 30px;
         top: 30px;
+        display: block; 
+        font-size: var(--font-size-l);
+        cursor: pointer;  /* make it clickable */
+        z-index: 1001;    /* ensure above overlay */
+        background: none;
+        border: none;
     }
 
     .navbar #menu-open-button{
         color: var(--white-color);
+        display: block; 
+        font-size: var(--font-size-l);
+        cursor: pointer;  /* make it clickable */
+        z-index: 1001;    /* ensure above overlay */
+        background: none;
+        border: none;
     }
 
     .navbar .nav-menu{
