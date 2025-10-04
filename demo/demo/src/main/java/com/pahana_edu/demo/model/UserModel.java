@@ -1,26 +1,3 @@
-/* 
-package com.pahana_edu.demo.model;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
-
-public class UserModel {
-    @Id
-    private String userid;
-    private String username;
-    private String email;
-    private String phone_number;
-    private String password;
-}
-*/
 package com.pahana_edu.demo.model;
 
 import jakarta.persistence.Entity;
@@ -36,6 +13,7 @@ import jakarta.validation.constraints.*;
 @Data
 public class UserModel {
     @Id
+    @NotBlank(message = "User ID cannot be empty or null")
     private String userid;
 
     @NotBlank(message = "Username is required")
@@ -45,7 +23,7 @@ public class UserModel {
     @NotBlank(message = "Email is required")
     private String email;
 
-    @Pattern(regexp = "^[0-9]{10}$", message = "Phone must be 10 digits")
+    @Pattern(regexp = "\\+?\\d{10,12}", message = "Phone must be 10–12 digits")
     private String phone_number;
 
     @NotBlank(message = "Password is required")

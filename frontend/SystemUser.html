@@ -3,249 +3,261 @@
 <head>
   <meta charset="UTF-8">
   <title>Pahana Edu</title>
-  
 
+  <link rel="stylesheet" href="style2.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
 
-<link rel="stylesheet" href="style2.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+  <!-- ✅ Full jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-<!-- jQuery library  -->
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>        
+  <!-- Bootstrap -->
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- 🔵 MODIFIED: Use full jQuery (not slim) -->
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> 
+  <!-- Auth -->
+  <script src="authService.js"></script>
+  <script src="authGuard.js"></script>
 
-<!-- Popper JS -->
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-
-<!-- Latest compiled JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- Load auth services first -->
-<script src="authService.js"></script>
-<script src="authGuard.js"></script>
-
-<!-- Authentication check -->
-
+  <style>
+    /* ✅ Delete button style */
+    .delete-btn {
+      background: none;
+      border: none;
+      color: red;
+      font-size: 18px;
+      cursor: pointer;
+      transition: transform 0.2s, color 0.2s;
+    }
+    .delete-btn:hover {
+      transform: scale(1.2);
+      color: darkred;
+    }
+  </style>
 </head>
 
-  <body>
-    <header>
-      <nav class="navbar section-content">
-        <h2 class="logo-text">📚 Pahana Edu</h2>
-        <ul class="nav-menu">
-          <button id="menu-close-button" class="fas fa-times"></button>
-          <li class="nav-item"><a href="customer-details.html" class="nav-link">Customer Details</a></li>
-          <li class="nav-item"><a href="SystemUser.html" class="nav-link">User Details</a></li>
-          <li class="nav-item"><a href="manage-items.html" class="nav-link">Manage Items</a></li>
-          <li class="nav-item"><a href="billing.html" class="nav-link">Billing</a></li>
-          <li class="nav-item"><a href="help.html" class="nav-link">Help</a></li>
-          <li class="nav-item"><a href="#" id="logout-link" class="nav-link">Logout</a></li>
+<body>
+  <header>
+    <nav class="navbar section-content">
+      <h2 class="logo-text">📚 Pahana Edu</h2>
+      <ul class="nav-menu">
+        <button id="menu-close-button" class="fas fa-times"></button>
+        <li class="nav-item"><a href="customer-details.html" class="nav-link">Customer Details</a></li>
+        <li class="nav-item"><a href="SystemUser.html" class="nav-link">User Details</a></li>
+        <li class="nav-item"><a href="manage-items.html" class="nav-link">Manage Items</a></li>
+        <li class="nav-item"><a href="billing.html" class="nav-link">Billing</a></li>
+        <li class="nav-item"><a href="help.html" class="nav-link">Help</a></li>
+        <li class="nav-item"><a href="#" id="logout-link" class="nav-link">Logout</a></li>
+      </ul>
+      <button id="menu-open-button" class="fas fa-bars"></button>
+    </nav>
+  </header>
 
-        </ul>
-        <button id="menu-open-button" class="fas fa-bars"></button>
-      </nav>
-    </header>
+  <img class="logo" src="https://c0.wallpaperflare.com/preview/484/270/562/read-book-books-book-store.jpg" />
 
-    <img class="logo" src="https://c0.wallpaperflare.com/preview/484/270/562/read-book-books-book-store.jpg" />
-  <!--
-  <div class="userContainer">
-  <div class="user-form-box">
-  -->
-    <div class="container">
-      <div class="form-box">
+  <div class="container">
+    <div class="form-box">
+      <h3>System User</h3>
+      <form id="userForm">
+        <label for="userid">User ID:</label>
+        <input type="text" id="userid" name="userid" required>
 
-        <h3>System User </h3>
-        <form id="userForm">
+        <label for="username">User name:</label>
+        <input type="text" id="username" name="username" required>
 
-          <label for="userid">User ID:</label>
-          <input type="text" id="userid" name="userid" required>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
 
-          <label for="username">User name:</label>
-          <input type="text" id="username" name="username" required>
+        <label for="phone_number">Mobile:</label>
+        <input type="tel" id="phone_number" name="phone_number">
 
-          <label for="email">Email:</label>
-          <input type="email" id="email" name="email" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
 
-          <label for="phone_number">Mobile:</label>
-          <input type="tel" id="phone_number" name="phone_number" required pattern="[0-9]{10}">
+        <button type="button" id="addUserBtn">Add User</button>
+        <button type="button" id="updateUserBtn">Update User</button>     
+      </form>
+    </div> 
 
-          <label for="password">Password:</label>
-          <input type="password" id="password" name="password" required>
-
-          <button type="button" id="addUserBtn">Add User</button>
-          <button type="button" id="updateUserBtn">Update User</button>     
-        </form>
-        
-      </div> 
-      <div class="table-responsive mt-4">
-        <table class="table table-bordered table-striped">
-          <thead>
-            <tr>
-              <th>User ID</th>
-              <th>User Name</th>
-              <th>Email</th>
-              <th>Phone Number</th>
-            </tr>
-          </thead>
-          <tbody id="user_model">
-            <!-- User rows will be inserted here by JavaScript -->
-          </tbody>
-        </table>
-      </div>
+    <div class="table-responsive mt-4">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>User ID</th>
+            <th>User Name</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Actions</th> <!-- ✅ Added Actions column -->
+          </tr>
+        </thead>
+        <tbody id="user_model">
+          <!-- User rows inserted dynamically -->
+        </tbody>
+      </table>
     </div>
+  </div>
 
-    <script>
-        let iti; // global variable
+  <script>
+    let iti;
 
-document.addEventListener("DOMContentLoaded", () => {
-  const input = document.querySelector("#phone_number");
-  iti = window.intlTelInput(input, {
-    initialCountry: "auto",
-    geoIpLookup: function(success, failure) {
-      fetch("https://ipapi.co/json")
-        .then(res => res.json())
-        .then(data => success(data.country_code))
-        .catch(() => success("US"));
-    },
-    utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
-  });
-});
-      //validation
-      function validateForm() {
-          const email = document.getElementById('email').value;
-          const phone_number = document.getElementById('phone_number').value;
+    document.addEventListener("DOMContentLoaded", () => {
+      const input = document.querySelector("#phone_number");
+      iti = window.intlTelInput(input, {
+        initialCountry: "auto",
+        geoIpLookup: function(success, failure) {
+          fetch("https://ipapi.co/json")
+            .then(res => res.json())
+            .then(data => success(data.country_code))
+            .catch(() => success("US"));
+        },
+        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+      });
+      loaduser();
+    });
 
-          // Simple email format validation
-          const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-          if (!emailPattern.test(email)) {
-              alert("Please enter a valid email address.");
-              return false;
-          }
-
-          // Phone number validation (10 digits)
-          if (!iti || !iti.isValidNumber()) {
-            alert("❌ Please enter a valid phone number with country code.");
-            return false;
-          }
-
-            return true;
+    function validateForm() {
+      const email = document.getElementById('email').value;
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(email)) {
+        alert("Please enter a valid email address.");
+        return false;
       }
 
-      //Add user
-    document.getElementById('addUserBtn').addEventListener('click', function(e) {
-        e.preventDefault();
-        if (!validateForm()) return;
-        
-        const formData = {
-            userid: document.getElementById('userid').value,
-            username: document.getElementById('username').value,
-            email: document.getElementById('email').value,
-            phone_number: iti.getNumber(),  // ✅ full number with country code
-            password: document.getElementById('password').value
-        };
+      if (!iti || !iti.isValidNumber()) {
+        alert("❌ Please enter a valid phone number with country code.");
+        return false;
+      }
 
-        fetch('http://localhost:8083/api/v1/adduser', { // http://localhost:4567/api/user
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData)
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.text();
-        })
-        .then(data => {
-            alert(data); // Show server response
-            document.getElementById('userForm').reset(); // Clear form
-            loaduser (); // Refresh table
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error: ' + error.message);
-        });
-    });
-    // Update User
-    document.getElementById('updateUserBtn').addEventListener('click', function (e) {
-        e.preventDefault();
-        if (!validateForm()) return;
-
-        const userid = document.getElementById('userid').value;
-        const updatedData = {
-            userid: userid,
-            username: document.getElementById('username').value,
-            email: document.getElementById('email').value,
-            phone_number: iti.getNumber(),  // ✅ full number with country code
-            password: document.getElementById('password').value
-        };
-
-        fetch(`http://localhost:8083/api/v1/updateuser/${userid}`, {
-            method: 'PATCH', // Or PUT depending on your backend
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(updatedData)
-        })
-        .then(response => {
-            if (!response.ok) throw new Error('Failed to update user');
-            return response.text();
-        })
-        .then(data => {
-            console.log(data);
-            document.getElementById('userForm').reset();
-            loaduser(); // Refresh table
-        })
-        .catch(error => {
-            console.error('Update Error:', error);
-            alert('Update Error: ' + error.message);
-        });
-    });
-    // Separate function for user 
-    function loaduser() {
-        fetch('http://localhost:8083/api/v1/getusers')
-            .then(response => response.json())
-            .then(users => {
-                const tableBody = document.getElementById('user_model');
-                tableBody.innerHTML = ''; // Clear previous rows
-
-                users.forEach(user => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${user.userid}</td>
-                        <td>${user.username}</td>
-                        <td>${user.email}</td>
-                        <td>${user.phone_number}</td>
-                        
-                    `;
-                    tableBody.appendChild(row);
-
-                    // Add click listener to fill form on row click
-                    row.addEventListener('click', function () {
-                        document.getElementById('userid').value = user.userid;
-                        document.getElementById('username').value = user.username;
-                        document.getElementById('email').value = user.email;
-                        document.getElementById('phone_number').value = user.phone_number;
-                        document.getElementById('password').value = user.password;
-                    });
-
-                });
-            })
-            .catch(error => console.error('Error loading user:', error));
+      return true;
     }
 
+    // ✅ Add user
+    document.getElementById('addUserBtn').addEventListener('click', function(e) {
+      e.preventDefault();
+      if (!validateForm()) return;
 
-    // Load user on page load
-    window.addEventListener('DOMContentLoaded', loaduser );
+      const formData = {
+        userid: document.getElementById('userid').value,
+        username: document.getElementById('username').value,
+        email: document.getElementById('email').value,
+        phone_number: iti.getNumber(),
+        password: document.getElementById('password').value
+      };
 
-    </script>
-    <script src="script.js"></script>
-  </body>
+      fetch('http://localhost:8083/api/v1/adduser', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      })
+      .then(response => {
+        if (!response.ok) throw new Error('Network response was not ok');
+        return response.text();
+      })
+      .then(data => {
+        alert(data);
+        document.getElementById('userForm').reset();
+        loaduser();
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Error: ' + error.message);
+      });
+    });
+
+    // ✅ Update user
+    document.getElementById('updateUserBtn').addEventListener('click', function (e) {
+      e.preventDefault();
+      if (!validateForm()) return;
+
+      const userid = document.getElementById('userid').value;
+      const updatedData = {
+        userid: userid,
+        username: document.getElementById('username').value,
+        email: document.getElementById('email').value,
+        phone_number: iti.getNumber(),
+        password: document.getElementById('password').value
+      };
+
+      fetch(`http://localhost:8083/api/v1/updateuser/${userid}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedData)
+      })
+      .then(response => {
+        if (!response.ok) throw new Error('Failed to update user');
+        return response.text();
+      })
+      .then(data => {
+        alert(data);
+        document.getElementById('userForm').reset();
+        loaduser();
+      })
+      .catch(error => {
+        console.error('Update Error:', error);
+        alert('Update Error: ' + error.message);
+      });
+    });
+
+    // ✅ Load all users
+    function loaduser() {
+      fetch('http://localhost:8083/api/v1/getusers')
+        .then(response => response.json())
+        .then(users => {
+          const tableBody = document.getElementById('user_model');
+          tableBody.innerHTML = '';
+
+          users.forEach(user => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${user.userid}</td>
+              <td>${user.username}</td>
+              <td>${user.email}</td>
+              <td>${user.phone_number}</td>
+              <td>
+                <button class="delete-btn" data-id="${user.userid}" title="Delete">🗑️</button>
+              </td>
+            `;
+            tableBody.appendChild(row);
+
+            // Fill form when row clicked
+            row.addEventListener('click', function () {
+              document.getElementById('userid').value = user.userid;
+              document.getElementById('username').value = user.username;
+              document.getElementById('email').value = user.email;
+              document.getElementById('phone_number').value = user.phone_number;
+              document.getElementById('password').value = user.password;
+            });
+          });
+        })
+        .catch(error => console.error('Error loading user:', error));
+    }
+
+    // ✅ Delete user (matching /deleteuser/{id})
+    document.addEventListener('click', function(e) {
+      if (e.target && e.target.closest('.delete-btn')) {
+        const id = e.target.closest('.delete-btn').getAttribute('data-id');
+        if (confirm(`Are you sure you want to delete user ID ${id}?`)) {
+          fetch(`http://localhost:8083/api/v1/deleteuser/${id}`, {
+            method: 'DELETE'
+          })
+          .then(response => {
+            if (!response.ok) throw new Error('Failed to delete user');
+            return response.text();
+          })
+          .then(data => {
+            alert(data);
+            document.getElementById('userForm').reset(); // ✅ Clear form if user deleted
+            loaduser();
+          })
+          .catch(error => {
+            console.error('Delete Error:', error);
+            alert('Delete Error: ' + error.message);
+          });
+        }
+      }
+    });
+  </script>
+
+  <script src="script.js"></script>
+</body>
 </html>
-
-
-
-

@@ -56,10 +56,10 @@ public class PurchaseService {
                 }
             }
 
-            // FIX: Preserve original unit price in the model
+            // Preserve original unit price in the model
             PurchaseModel purchaseModel = modelMapper.map(purchaseDTO, PurchaseModel.class);
 
-            // Add lineTotal field if your model has it, otherwise calculate when needed
+            // Add lineTotal field
             purchaseModel.setLineTotal(
                     purchaseDTO.getItemPrice().multiply(BigDecimal.valueOf(purchaseDTO.getQuantity())));
 
@@ -74,7 +74,7 @@ public class PurchaseService {
         return purchases.stream()
                 .map(p -> {
                     PurchaseDTO dto = modelMapper.map(p, PurchaseDTO.class);
-                    // Ensure we're returning the unit price, not line total
+                    // returning the unit price, not line total
                     if (p.getLineTotal() != null) {
                         dto.setItemPrice(p.getItemPrice()); // Preserve original unit price
                     }

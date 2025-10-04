@@ -697,6 +697,7 @@ document.getElementById('printInvoiceBtn').addEventListener('click', () => {
 // Clear form when modal is closed
 $('#invoiceModal').on('hidden.bs.modal', function () {
   clearAll();
+  location.reload();
 });
 
 /* ---------- Clear Form ---------- */

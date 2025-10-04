@@ -4,231 +4,245 @@
   <meta charset="UTF-8">
   <title>Pahana Edu</title>
 
+  <link rel="stylesheet" href="style2.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
 
-<link rel="stylesheet" href="style2.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
+  <!-- Popper + Bootstrap -->
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- jQuery library -->
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script> 
+  <!-- Auth scripts -->
+  <script src="authService.js"></script>
+  <script src="authGuard.js"></script>
 
-<!-- 🔵 MODIFIED: Use full jQuery (not slim) -->
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
-<!-- Popper JS -->
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-
-<!-- Latest compiled JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- Load auth services first -->
-<script src="authService.js"></script>
-<script src="authGuard.js"></script>
-
-
-
+  <style>
+    /* ✅ Delete button styling */
+    .delete-btn {
+      background: none;
+      border: none;
+      color: red;
+      font-size: 18px;
+      cursor: pointer;
+      transition: transform 0.2s, color 0.2s;
+    }
+    .delete-btn:hover {
+      transform: scale(1.2);
+      color: darkred;
+    }
+  </style>
 
 </head>
 
 <body>
   <header>
-      <nav class="navbar section-content">
-        <h2 class="logo-text">📚 Pahana Edu</h2>
-        <ul class="nav-menu">
-          <button id="menu-close-button" class="fas fa-times"></button>
-          <li class="nav-item"><a href="customer-details.html" class="nav-link">Customer Details</a></li>
-          <li class="nav-item"><a href="SystemUser.html" class="nav-link">User Details</a></li>
-          <li class="nav-item"><a href="manage-items.html" class="nav-link">Manage Items</a></li>
-          <li class="nav-item"><a href="billing.html" class="nav-link">Billing</a></li>
-          <li class="nav-item"><a href="help.html" class="nav-link">Help</a></li>
-          <li class="nav-item"><a href="#" id="logout-link" class="nav-link">Logout</a></li>
+    <nav class="navbar section-content">
+      <h2 class="logo-text">📚 Pahana Edu</h2>
+      <ul class="nav-menu">
+        <button id="menu-close-button" class="fas fa-times"></button>
+        <li class="nav-item"><a href="customer-details.html" class="nav-link">Customer Details</a></li>
+        <li class="nav-item"><a href="SystemUser.html" class="nav-link">User Details</a></li>
+        <li class="nav-item"><a href="manage-items.html" class="nav-link">Manage Items</a></li>
+        <li class="nav-item"><a href="billing.html" class="nav-link">Billing</a></li>
+        <li class="nav-item"><a href="help.html" class="nav-link">Help</a></li>
+        <li class="nav-item"><a href="#" id="logout-link" class="nav-link">Logout</a></li>
+      </ul>
+      <button id="menu-open-button" class="fas fa-bars"></button>
+    </nav>
+  </header>
 
-        </ul>
-        <button id="menu-open-button" class="fas fa-bars"></button>
-      </nav>
-    </header>
+  <img class="logo" src="https://c0.wallpaperflare.com/preview/484/270/562/read-book-books-book-store.jpg" />
 
-<img class="logo" src="https://c0.wallpaperflare.com/preview/484/270/562/read-book-books-book-store.jpg" />
-<div class="container">
-  <div class="form-box">
-    <h3>Customers </h3>
-    <form id="customerForm">
-      <label for="customerId">Customer ID:</label>
-      <input type="text" id="customerId" name="customerId" required>
+  <div class="container">
+    <div class="form-box">
+      <h3>Customers</h3>
+      <form id="customerForm">
+        <label for="customerId">Customer ID:</label>
+        <input type="text" id="customerId" name="customerId" required>
 
-      <label for="customerName">Customer Name:</label>
-      <input type="text" id="customerName" name="customerName" required>
+        <label for="customerName">Customer Name:</label>
+        <input type="text" id="customerName" name="customerName" required>
 
-      <label for="customerAddress">Customer Address:</label>
-      <textarea id="customerAddress" name="customerAddress" required></textarea>
+        <label for="customerAddress">Customer Address:</label>
+        <textarea id="customerAddress" name="customerAddress" required></textarea>
 
-      <label for="phoneNumber">Mobile:</label>
-      <input type="tel" id="phoneNumber" name="phoneNumber" required pattern="[0-9]{10}">
+        <label for="phoneNumber">Mobile:</label>
+        <input type="tel" id="phoneNumber" name="phoneNumber">
 
-      <button type="submit" id="addCustomerBtn">Add Customer</button>
-      <button type="submit" id="updateCustomerBtn">Update Customer</button>
+        <button type="submit" id="addCustomerBtn">Add Customer</button>
+        <button type="submit" id="updateCustomerBtn">Update Customer</button>
+      </form>
+    </div>
 
-    </form>
-    
-  </div> 
-  <div class="table-responsive mt-4">
-    <table class="table table-bordered table-striped">
-      <thead>
-        <tr>
-          <th>Customer ID</th>
-          <th>Customer Name</th>
-          <th>Customer Address</th>
-          <th>Phone Number</th>
-        </tr>
-      </thead>
-      <tbody id="customer_model">
-        <!-- customer rows will be inserted here by JavaScript -->
-      </tbody>
-    </table>
+    <div class="table-responsive mt-4">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Customer ID</th>
+            <th>Customer Name</th>
+            <th>Customer Address</th>
+            <th>Phone Number</th>
+            <th>Actions</th> <!-- ✅ Added Actions column -->
+          </tr>
+        </thead>
+        <tbody id="customer_model">
+          <!-- customer rows will be inserted here -->
+        </tbody>
+      </table>
+    </div>
   </div>
-</div>
 
-<script>
-  let iti; // global variable
+  <script>
+    let iti;
 
-document.addEventListener("DOMContentLoaded", () => {
-  const input = document.querySelector("#phoneNumber");
-  iti = window.intlTelInput(input, {
-    initialCountry: "auto",
-    geoIpLookup: function(success, failure) {
-      fetch("https://ipapi.co/json")
-        .then(res => res.json())
-        .then(data => success(data.country_code))
-        .catch(() => success("US"));
-    },
-    utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
-  });
-});
+    document.addEventListener("DOMContentLoaded", () => {
+      const input = document.querySelector("#phoneNumber");
+      iti = window.intlTelInput(input, {
+        initialCountry: "auto",
+        geoIpLookup: function(success, failure) {
+          fetch("https://ipapi.co/json")
+            .then(res => res.json())
+            .then(data => success(data.country_code))
+            .catch(() => success("US"));
+        },
+        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+      });
 
-//validate
-function validateForm() {
+      loadcustomer();
+    });
 
-    // ✅ Check if number is valid
-    if (!iti || !iti.isValidNumber()) {
-    alert("❌ Please enter a valid phone number with country code.");
-    return false;
-  }
+    function validateForm() {
+      if (!iti || !iti.isValidNumber()) {
+        alert("❌ Please enter a valid phone number with country code.");
+        return false;
+      }
+      return true;
+    }
 
-    return true;
-}
+    // ✅ Add customer
+    document.getElementById('addCustomerBtn').addEventListener('click', function(e) {
+      e.preventDefault();
+      if (!validateForm()) return;
 
-  //Add customer
-document.getElementById('addCustomerBtn').addEventListener('click', function(e) {
-    e.preventDefault();
-    if (!validateForm()) return;
-    
-    const formData = {
+      const formData = {
         customerId: document.getElementById('customerId').value,
         customerName: document.getElementById('customerName').value,
         customerAddress: document.getElementById('customerAddress').value,
-        phoneNumber: iti.getNumber()  // ✅ full number with country code
+        phoneNumber: iti.getNumber()
+      };
 
-    };
-
-    fetch('http://localhost:8083/api/v1/addcustomer', { // http://localhost:4567/api/customer
+      fetch('http://localhost:8083/api/v1/addcustomer', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
+      })
+      .then(response => {
+        if (!response.ok) throw new Error('Network response was not ok');
         return response.text();
-    })
-    .then(data => {
-        alert(data); // Show server response
-        document.getElementById('customerForm').reset(); // Clear form
-        loadcustomer (); // Refresh table
-    })
-    .catch(error => {
+      })
+      .then(data => {
+        alert(data);
+        document.getElementById('customerForm').reset();
+        loadcustomer();
+      })
+      .catch(error => {
         console.error('Error:', error);
         alert('Error: ' + error.message);
+      });
     });
-});
-// Update customer
-document.getElementById('updateCustomerBtn').addEventListener('click', function (e) {
-    e.preventDefault();
-    if (!validateForm()) return;
 
-    const customerId = document.getElementById('customerId').value;
-    const updatedData = {
+    // ✅ Update customer
+    document.getElementById('updateCustomerBtn').addEventListener('click', function(e) {
+      e.preventDefault();
+      if (!validateForm()) return;
+
+      const customerId = document.getElementById('customerId').value;
+      const updatedData = {
         customerId: customerId,
         customerName: document.getElementById('customerName').value,
         customerAddress: document.getElementById('customerAddress').value,
-        phoneNumber: iti.getNumber()  // ✅ full number with country code
+        phoneNumber: iti.getNumber()
+      };
 
-    };
-
-    fetch(`http://localhost:8083/api/v1/updatecustomer/${customerId}`, {
-        method: 'PATCH', // Or PUT depending on your backend
-        headers: {
-            'Content-Type': 'application/json',
-        },
+      fetch(`http://localhost:8083/api/v1/updatecustomer/${customerId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedData)
-    })
-    .then(response => {
+      })
+      .then(response => {
         if (!response.ok) throw new Error('Failed to update customer');
         return response.text();
-    })
-    .then(data => {
-        //console.log(data);
-        alert(data); <!-- 🔵 -->
+      })
+      .then(data => {
+        alert(data);
         document.getElementById('customerForm').reset();
-        loadcustomer(); // Refresh table
-    })
-    .catch(error => {
+        loadcustomer();
+      })
+      .catch(error => {
         console.error('Update Error:', error);
         alert('Update Error: ' + error.message);
+      });
     });
-});
-// Get customers
-function loadcustomer() {
-    fetch('http://localhost:8083/api/v1/getcustomers')
+
+    // ✅ Load all customers
+    function loadcustomer() {
+      fetch('http://localhost:8083/api/v1/getcustomers')
         .then(response => response.json())
         .then(customers => {
-            const tableBody = document.getElementById('customer_model');
-            tableBody.innerHTML = ''; // Clear previous rows
+          const tableBody = document.getElementById('customer_model');
+          tableBody.innerHTML = '';
 
-            customers.forEach(customer => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${customer.customerId}</td>
-                    <td>${customer.customerName}</td>
-                    <td>${customer.customerAddress}</td>
-                    <td>${customer.phoneNumber}</td>
-                `;
-                tableBody.appendChild(row);
+          customers.forEach(customer => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${customer.customerId}</td>
+              <td>${customer.customerName}</td>
+              <td>${customer.customerAddress}</td>
+              <td>${customer.phoneNumber}</td>
+              <td>
+                <button class="delete-btn" data-id="${customer.customerId}" title="Delete">🗑️</button>
+              </td>
+            `;
+            tableBody.appendChild(row);
 
-                // Add click listener to fill form on row click
-                row.addEventListener('click', function () {
-                    document.getElementById('customerId').value = customer.customerId;
-                    document.getElementById('customerName').value = customer.customerName;
-                    document.getElementById('customerAddress').value = customer.customerAddress;
-                    document.getElementById('phoneNumber').value = customer.phoneNumber;
-                });
-
+            // Fill form when a row is clicked
+            row.addEventListener('click', function () {
+              document.getElementById('customerId').value = customer.customerId;
+              document.getElementById('customerName').value = customer.customerName;
+              document.getElementById('customerAddress').value = customer.customerAddress;
+              document.getElementById('phoneNumber').value = customer.phoneNumber;
             });
+          });
         })
         .catch(error => console.error('Error loading customer:', error));
-}
+    }
 
-
-// Load customer on page load
-
-window.addEventListener('DOMContentLoaded', loadcustomer); 
-</script>
+    // ✅ Handle delete customer (updated to match your API)
+    document.addEventListener('click', function(e) {
+      if (e.target && e.target.closest('.delete-btn')) {
+        const id = e.target.closest('.delete-btn').getAttribute('data-id'); // ✅ matches @PathVariable String id
+        if (confirm(`Are you sure you want to delete customer ID ${id}?`)) {
+          fetch(`http://localhost:8083/api/v1/deletecustomer/${id}`, {
+            method: 'DELETE'
+          })
+          .then(response => {
+            if (!response.ok) throw new Error('Failed to delete customer');
+            return response.text();
+          })
+          .then(data => {
+            alert(data);
+            loadcustomer();
+          })
+          .catch(error => {
+            console.error('Delete Error:', error);
+            alert('Delete Error: ' + error.message);
+          });
+        }
+      }
+    });
+  </script>
 </body>
 </html>
-
-
-
-

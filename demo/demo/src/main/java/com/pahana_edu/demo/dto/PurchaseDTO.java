@@ -119,7 +119,11 @@ public class PurchaseDTO {
     private String purchasedDateTime;
     private BigDecimal lineTotal;
 
-    // Proper constructor
+    // No-argument constructor required by ModelMapper
+    public PurchaseDTO() {
+    }
+
+    // constructor
     public PurchaseDTO(Long purchaseId, String purchaseCode, String customerId, String itemCode, String itemName,
             BigDecimal itemPrice, int quantity, BigDecimal discount, BigDecimal lineTotal, String purchasedDateTime) {
         this.purchaseId = purchaseId;

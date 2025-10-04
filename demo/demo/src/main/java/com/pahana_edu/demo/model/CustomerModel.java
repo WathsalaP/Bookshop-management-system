@@ -1,28 +1,9 @@
-/*package com.pahana_edu.demo.model;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
-
-public class CustomerModel {
-    @Id
-    private String customerId;
-    private String customerName;
-    private String customerAddress;
-    private String phoneNumber;
-
-}*/
 
 package com.pahana_edu.demo.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -36,7 +17,9 @@ import jakarta.validation.constraints.Pattern;
 @AllArgsConstructor
 @Data
 public class CustomerModel {
+
     @Id
+    @NotBlank(message = "Customer ID cannot be empty or null")
     private String customerId;
 
     @NotBlank(message = "Customer name is required")
@@ -46,6 +29,7 @@ public class CustomerModel {
     private String customerAddress;
 
     @NotBlank(message = "Phone number is required")
-    @Pattern(regexp = "^[0-9]{10}$", message = "Phone number must be 10 digits")
+    @Pattern(regexp = "\\+?\\d{10,12}", message = "Phone must be 10–12 digits")
     private String phoneNumber;
+
 }

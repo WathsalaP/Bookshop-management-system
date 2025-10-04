@@ -1,11 +1,13 @@
 package com.pahana_edu.demo.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class CustomerDTO {
+    @NotBlank(message = "Customer ID cannot be empty or null")
     private String customerId;
     private String customerName;
     private String customerAddress;
     private String phoneNumber;
-
 
     // Getters and Setters
     public String getCustomerId() {
@@ -31,6 +33,7 @@ public class CustomerDTO {
     public void setCustomerAddress(String customerAddress) {
         this.customerAddress = customerAddress;
     }
+
     public String getPhoneNumber() {
         return phoneNumber;
     }
