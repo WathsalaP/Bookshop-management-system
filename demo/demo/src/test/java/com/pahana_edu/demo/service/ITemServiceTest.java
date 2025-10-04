@@ -16,6 +16,8 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 public class ITemServiceTest {
@@ -34,6 +36,8 @@ public class ITemServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    // ✅ Test to ensure saving a new item auto-generates an item code when no
+    // previous items exist
     @Test
     void saveItem_shouldAutoGenerateCode() {
         // Arrange
@@ -57,6 +61,8 @@ public class ITemServiceTest {
         verify(itemRepo, times(1)).save(any(ItemModel.class));
     }
 
+    // ✅ Test to ensure saving a new item increments from the last existing item
+    // code
     @Test
     void saveItem_shouldIncrementFromLastCode() {
         // Arrange
@@ -83,6 +89,7 @@ public class ITemServiceTest {
         verify(itemRepo).save(any(ItemModel.class));
     }
 
+    // ✅ Test to ensure updating an existing item persists the changes correctly
     @Test
     void updateItem_shouldPersistWhenFound() {
         // Arrange
@@ -107,6 +114,7 @@ public class ITemServiceTest {
         verify(itemRepo).save(any(ItemModel.class));
     }
 
+    // ✅ Test to ensure updating a non-existent item throws a RuntimeException
     @Test
     void updateItem_shouldThrowWhenNotFound() {
         // Arrange
@@ -120,6 +128,7 @@ public class ITemServiceTest {
         assertTrue(ex.getMessage().contains("Item not found"));
     }
 
+    // ✅ Test to ensure deleting a non-existent item throws a RuntimeException
     @Test
     void deleteItem_shouldThrowWhenNotFound() {
         when(itemRepo.findById("ITEMX")).thenReturn(Optional.empty());
@@ -127,6 +136,7 @@ public class ITemServiceTest {
         assertTrue(ex.getMessage().contains("Item not found"));
     }
 
+    // ✅ Test to ensure deleting an existing item calls the repository delete method
     @Test
     void deleteItem_shouldDeleteWhenFound() {
         ItemModel existing = new ItemModel("ITEM0003", "Book C", new BigDecimal("10.00"), "3");

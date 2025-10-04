@@ -33,13 +33,17 @@ public class UserServiceTest {
     private UserModel userModel;
     private UserDTO userDTO;
 
+    // ✅ Setup method to initialize mocks and sample test data before each test
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        userModel = new UserModel("U1", "John", "john@example.com", "12345", "pass"); // --> New
-        userDTO = new UserDTO("U1", "John", "john@example.com", "12345", "pass"); // --> New
+        // Sample UserModel representing a persisted user
+        userModel = new UserModel("U1", "John", "john@example.com", "12345", "pass");
+        // Corresponding DTO for transferring user data
+        userDTO = new UserDTO("U1", "John", "john@example.com", "12345", "pass");
     }
 
+    // ✅ Test retrieving all users from the repository
     @Test
     void testGetAllUsers() {
         when(userRepo.findAll()).thenReturn(Arrays.asList(userModel));
@@ -52,6 +56,7 @@ public class UserServiceTest {
         assertEquals("John", result.get(0).getUsername());
     }
 
+    // ✅ Test saving a new user to the repository
     @Test
     void testSaveUser() {
         when(modelMapper.map(userDTO, UserModel.class)).thenReturn(userModel);
@@ -63,6 +68,7 @@ public class UserServiceTest {
         verify(userRepo, times(1)).save(userModel);
     }
 
+    // ✅ Test updating an existing user successfully
     @Test
     void testUpdateUser_Success() {
         when(userRepo.findById("U1")).thenReturn(Optional.of(userModel));
@@ -74,6 +80,7 @@ public class UserServiceTest {
         verify(userRepo, times(1)).save(userModel);
     }
 
+    // ✅ Test updating a user that does not exist (should throw exception)
     @Test
     void testUpdateUser_NotFound() {
         when(userRepo.findById("U2")).thenReturn(Optional.empty());
@@ -83,6 +90,7 @@ public class UserServiceTest {
         assertTrue(ex.getMessage().contains("User not found"));
     }
 
+    // ✅ Test deleting an existing user successfully
     @Test
     void testDeleteUser_Success() {
         when(userRepo.findById("U1")).thenReturn(Optional.of(userModel));
@@ -92,6 +100,7 @@ public class UserServiceTest {
         verify(userRepo, times(1)).delete(userModel);
     }
 
+    // ✅ Test deleting a user that does not exist (should throw exception)
     @Test
     void testDeleteUser_NotFound() {
         when(userRepo.findById("U2")).thenReturn(Optional.empty());

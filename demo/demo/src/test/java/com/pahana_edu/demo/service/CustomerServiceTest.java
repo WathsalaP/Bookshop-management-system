@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,6 +30,8 @@ public class CustomerServiceTest {
     @InjectMocks
     CustomerService customerService;
 
+    // Test to ensure that saving a new customer persists the customer correctly in
+    // the repository
     @Test
     void saveCustomer_shouldPersist() {
         CustomerDTO dto = new CustomerDTO();
@@ -49,6 +52,8 @@ public class CustomerServiceTest {
         verify(customerRepo).save(any(CustomerModel.class));
     }
 
+    // Test to ensure that updating an existing customer modifies the customer's
+    // data correctly
     @Test
     void updateCustomer_shouldUpdateWhenExists() {
         CustomerDTO dto = new CustomerDTO();
@@ -70,6 +75,8 @@ public class CustomerServiceTest {
         verify(customerRepo).save(any(CustomerModel.class));
     }
 
+    // Test to ensure that updating a customer that does not exist throws a
+    // RuntimeException
     @Test
     void updateCustomer_shouldThrowWhenNotFound() {
         CustomerDTO dto = new CustomerDTO();
